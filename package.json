@@ -2,19 +2,29 @@
   "name": "MongoDBTutorial",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1",
-    "mongoose": "^5.5.11",
+    "@koa/cors": "^3.0.0",
+    "@koa/router": "^8.0.2",
+    "dotenv": "^8.2.0",
+    "koa": "^2.10.0",
+    "koa-bodyparser": "^4.2.1",
+    "koa-combine-routers": "^4.0.2",
+    "koa-helmet": "^5.2.0",
     "mongodb": "latest"
   },
   "devDependencies": {
-    "cors": "^2.8.5"
+    "eslint": "^6.5.1",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-config-prettier": "^6.4.0",
+    "eslint-plugin-import": "^2.18.2",
+    "nodemon": "^1.19.4"
   }
 }
