@@ -1,31 +1,35 @@
-function Product() {
-  let collection = null;
+class ProductService {
+  constructor(database) {
+    this.collection = database.collection("Products");
+  }
 
-  this.setCollection = newCollection => {
-    collection = newCollection;
-  };
+  getCollection() {
+    return this.collection;
+  }
 
-  this.getProducts = async () => {
-    return collection.find({});
-  };
+  setCollection(collection) {
+    this.collection = collection;
+  }
 
-  this.getProduct = async id => {
-    return collection.find({ product_id: id });
-  };
+  async getProducts() {
+    return this.collection.find({});
+  }
 
-  this.addProduct = async product => {
-    return collection.insert(product);
-  };
+  async getProduct(id) {
+    return this.collection.find({ product_id: id });
+  }
 
-  this.updateProduct = async (id, product) => {
-    return collection.update({ product_id: id }, product);
-  };
+  async addProduct(product) {
+    return this.collection.insert(product);
+  }
 
-  this.deleteProduct = async id => {
-    return collection.deleteOne({ product_id: id });
-  };
+  async updateProduct(id, product) {
+    return this.collection.update({ product_id: id }, product);
+  }
+
+  async deleteProduct(id) {
+    return this.collection.deleteOne({ product_id: id });
+  }
 }
 
-const product = new Product();
-
-module.exports = product;
+module.exports = ProductService;
