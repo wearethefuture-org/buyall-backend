@@ -1,36 +1,22 @@
 const Router = require("@koa/router");
 
-const products = require("./handlers/products/products");
-const product = require("./handlers/products/product");
-const addProduct = require("./handlers/products/addProduct");
-const updateProduct = require("./handlers/products/updateProduct");
-const deleteProduct = require("./handlers/products/deleteProduct");
+const productsHandlers = require("./handlers/productsHandlers");
 
 const router = new Router();
 
 // Get all products
-router.get("/products", async ctx => {
-  ctx.response.body = await products();
-});
+router.get("/products", productsHandlers.products);
 
 // Get one product
-router.get("/product/:id", async ctx => {
-  ctx.response.body = await product(ctx);
-});
+router.get("/product/:id", productsHandlers.product);
 
 // Add new product
-router.post("/product", async ctx => {
-  ctx.response.body = await addProduct(ctx);
-});
+router.post("/product", productsHandlers.addProduct);
 
 // Update product
-router.put("/product/:id", async ctx => {
-  ctx.response.body = await updateProduct(ctx);
-});
+router.put("/product/:id", productsHandlers.updateProduct);
 
 // Delete product
-router.delete("/product/:id", async ctx => {
-  ctx.response.body = await deleteProduct(ctx);
-});
+router.delete("/product/:id", productsHandlers.deleteProduct);
 
 module.exports = router;

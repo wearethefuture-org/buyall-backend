@@ -22,7 +22,7 @@ database
   .connect()
   .then(({ serverConfig, databaseName }) => {
     console.log(
-      `Connected to ${serverConfig.host}:${serverConfig.port}/${databaseName}`
+      `Connected to ${serverConfig.s.options.srvHost}/${databaseName}`
     );
     app.listen(port, () => console.log(`Server started on port ${port}`));
   })
