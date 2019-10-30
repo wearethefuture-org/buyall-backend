@@ -8,6 +8,5 @@ dotenv.config({ path: root(".env") });
 exports.url = process.env.URL;
 exports.port = process.env.PORT;
 
-// MongoDB
-exports.mongoURL = process.env.MONGO_URL;
-exports.databaseName = process.env.DATABASE_NAME;
+// PostgreSQL
+exports.postgreURL = process.env.POSTGRE_URL;

@@ -19,11 +19,9 @@ app.use(errorHandler);
 app.use(router);
 
 database
-  .connect()
-  .then(({ serverConfig, databaseName }) => {
-    console.log(
-      `Connected to ${serverConfig.s.options.srvHost}/${databaseName}`
-    );
+  .authenticate()
+  .then(() => {
+    console.log("Connected to database");
     app.listen(port, () => console.log(`Server started on port ${port}`));
   })
   .catch(() => {
