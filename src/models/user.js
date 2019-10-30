@@ -43,7 +43,7 @@ User.init(
     sequelize,
     modelName: "users",
     instanceMethods: {
-      matchesPassword(password) {
+      comparePassword(password) {
         return compare(password, this.password);
       }
     }
