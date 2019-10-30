@@ -1,33 +1,16 @@
-const { MongoClient, ObjectID } = require("mongodb");
+const Sequelize = require("sequelize");
 
-const { mongoURL, databaseName } = require("../utils/config");
+const { postgreURL } = require("../utils/config");
 
-class DatabaseService {
-  constructor() {
-    this.database = null;
+const database = new Sequelize(postgreURL, {
+  dialect: "postgres",
+
+  pool: {
+    max: 5,
+    min: 0,
+    acquire: 30000,
+    idle: 10000
   }
-
-  connect() {
-    if (this.database) {
-      return null;
-    }
-    return MongoClient.connect(mongoURL, { useNewUrlParser: true }).then(
-      client => {
-        this.database = client.db(databaseName);
-        return this.database;
-      }
-    );
-  }
-
-  getDB() {
-    return this.database;
-  }
-
-  static getPrimaryKey(id) {
-    return ObjectID(id);
-  }
-}
-
-const database = new DatabaseService();
+});
 
 module.exports = database;
