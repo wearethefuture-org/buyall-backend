@@ -1,6 +1,6 @@
-const combineRouters = require("koa-combine-routers");
+const combineRouters = require('../utils/combineRouters');
 
-const usersRouter = require("./users");
+const usersRouter = require('./users');
 
 const router = combineRouters([usersRouter]);
 

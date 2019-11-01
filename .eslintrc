@@ -2,7 +2,7 @@
   "extends": ["airbnb-base", "prettier"],
   "rules": {
     "quotes": ["error", "single", { "allowTemplateLiterals": true }],
-    "no-console": "error",
+    "no-console": 0,
     "no-return-await": "off",
     "camelcase": 0,
     "no-underscore-dangle": 0,

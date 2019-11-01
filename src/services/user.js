@@ -1,12 +1,12 @@
-const User = require("../db/models/user");
+const BaseModel = require('./baseModel');
 
-class UserService extends User {
+class UserService extends BaseModel {
   async getUsers() {
-    return this.findAll({});
+    return this.model.users.findAll({});
   }
 
   async getUser(id) {
-    return this.findAll({
+    return this.model.users.findAll({
       where: {
         id
       }
@@ -14,11 +14,11 @@ class UserService extends User {
   }
 
   async createUser(user) {
-    return this.create(user);
+    return this.model.users.create(user);
   }
 
   async updateUser(id, user) {
-    return this.update(user, {
+    return this.model.users.update(user, {
       where: {
         id
       }
@@ -26,7 +26,7 @@ class UserService extends User {
   }
 
   async deleteUser(id) {
-    return this.destroy({
+    return this.model.users.destroy({
       where: {
         id
       }
