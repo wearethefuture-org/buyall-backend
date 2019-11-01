@@ -1,6 +1,7 @@
-module.exports = {
-  up: (queryInterface, DataTypes) =>
-    queryInterface.createTable('users', {
+module.exports = (sequelize, DataTypes) => {
+  const user = sequelize.define(
+    'users',
+    {
       id: {
         type: DataTypes.BIGINT,
         allowNull: false,
@@ -41,12 +42,28 @@ module.exports = {
         defaultValue: false,
         field: 'disabled'
       },
-      createdDatetime: {
+      createdAt: {
         type: DataTypes.DATE,
         allowNull: false,
-        defaultValue: DataTypes.literal('CURRENT_TIMESTAMP'),
-        field: 'created_datetime'
+        defaultValue: sequelize.fn('NOW'),
+        field: 'created_at'
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        allowNull: true,
+        field: 'updated_at'
       }
-    }),
-  down: queryInterface => queryInterface.dropTable('users', {})
+    },
+    {
+      tableName: 'users',
+      timestamps: false,
+      createdAt: 'created_at',
+      updatedAt: true
+    }
+  );
+  // eslint-disable-next-line
+  user.associate = function(models) {
+    // associations can be defined here
+  };
+  return user;
 };

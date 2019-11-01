@@ -2,8 +2,8 @@ const fs = require('fs');
 const path = require('path');
 const Sequelize = require('sequelize');
 
-const aliases = require('./sources/aliases');
-const relations = require('./sources/relations');
+const aliases = require('./aliases');
+const relations = require('./relations');
 
 const {
   databaseName,
@@ -26,14 +26,14 @@ const sequelize = new Sequelize(databaseName, username, password, {
   }
 });
 
-fs.readdirSync(__dirname)
+fs.readdirSync(`${__dirname}/sources`)
   .filter(file => {
     return (
       file.indexOf('.') !== 0 && file !== basename && file.slice(-3) === '.js'
     );
   })
   .forEach(file => {
-    const model = sequelize.import(path.join(__dirname, file));
+    const model = sequelize.import(path.join(__dirname, 'sources', file));
     db[model.name] = model;
   });
 
