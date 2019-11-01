@@ -1,5 +1,5 @@
-const UserService = require("../../services/user");
-const database = require("../../services/database");
+const UserService = require('../../services/user');
+const database = require('../../services/database');
 
 // Create new user
 module.exports.createUser = async ctx => {
@@ -28,6 +28,7 @@ module.exports.user = async ctx => {
 // Get all users
 module.exports.users = async ctx => {
   const userService = new UserService(database);
+
   ctx.response.body = await userService.getUsers();
 };
 
