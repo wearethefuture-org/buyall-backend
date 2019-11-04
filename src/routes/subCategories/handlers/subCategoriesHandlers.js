@@ -10,8 +10,8 @@ const getSubCategory = async ctx => {
 };
 
 const createtSubCategory = async ctx => {
-    const newCategory = ctx.request.body;
-    ctx.response.body = await SubCategoryService.createSubCategory(newCategory);
+    const newSubCategory = ctx.request.body;
+    ctx.response.body = await SubCategoryService.createSubCategory(newSubCategory);
 };
 
 const updateSubCategory = async ctx => {

@@ -1,7 +1,6 @@
 const BaseModel = require('./baseModel');
 
 class CategoryService extends BaseModel {
-  // get all categories with included sub categories
   async getCategories() {
     return this.model.categories.findAll({
       // add sub categories belong to category
@@ -13,7 +12,32 @@ class CategoryService extends BaseModel {
     });
   }
 
-  // delete category by id
+  async getCategory(id) {
+    return this.model.categories.findAll({
+      where: {
+        id
+      },
+      // add sub categories belong to category
+      include: [{
+        model: this.model.subCategories,
+        as: 'subCategories',
+        paranoid: false 
+      }]
+    });
+  }
+
+  async updateCategory(id, category) {
+    return this.model.categories.update(category, {
+      where: {
+        id
+      }
+    });
+  }
+
+  async createCategory(category) {
+    return this.model.categories.create(category);
+  }
+
   async deleteCategory(id) {
     return this.model.categories.destroy({
       where: {
