@@ -61,9 +61,5 @@ module.exports = (sequelize, DataTypes) => {
       updatedAt: true
     }
   );
-  // eslint-disable-next-line
-  user.associate = function(models) {
-    // associations can be defined here
-  };
   return user;
 };

@@ -43,10 +43,10 @@ Object.keys(db).forEach(modelName => {
   }
 });
 
-relations(db);
-
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 db.aliases = aliases;
+
+relations(db);
 
 module.exports = db;
