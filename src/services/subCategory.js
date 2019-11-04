@@ -1,14 +1,6 @@
 const BaseModel = require('./baseModel');
 
 class SubCategoryService extends BaseModel {
-  async deleteSubCategory(id) {
-    return this.model.subCategories.destroy({
-      where: {
-        id
-      }
-    });
-  }
-
   async getSubCategory(id) {
     return this.model.subCategories.findAll({
       where: {
@@ -27,6 +19,14 @@ class SubCategoryService extends BaseModel {
 
   async updateSubCategory(id, subCategory) {
     return this.model.subCategories.update(subCategory, {
+      where: {
+        id
+      }
+    });
+  }
+
+  async deleteSubCategory(id) {
+    return this.model.subCategories.destroy({
       where: {
         id
       }
