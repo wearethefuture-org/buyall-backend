@@ -1,31 +1,39 @@
-const UserService = new (require('../../../services/user'))();
+const UserService = require('../../services/user');
 
-// Create new user
-module.exports.createUser = async ctx => {
+const createUser = async ctx => {
+  const userService = new UserService();
   const newUser = ctx.request.body;
-  ctx.response.body = await UserService.createUser(newUser);
+  ctx.response.body = await userService.createUser(newUser);
 };
 
-// Delete user
-module.exports.deleteUser = async ctx => {
+const deleteUser = async ctx => {
+  const userService = new UserService();
   const { id } = ctx.params;
-  ctx.response.body = await UserService.deleteUser(id);
+  ctx.response.body = await userService.deleteUser(id);
 };
 
-// Get one user
-module.exports.user = async ctx => {
+const user = async ctx => {
+  const userService = new UserService();
   const { id } = ctx.params;
-  ctx.response.body = await UserService.getUser(id);
+  ctx.response.body = await userService.getUser(id);
 };
 
-// Get all users
-module.exports.users = async ctx => {
-  ctx.response.body = await UserService.getUsers();
+const users = async ctx => {
+  const userService = new UserService();
+  ctx.response.body = await userService.getUsers();
 };
 
-// Update user
-module.exports.updateUser = async ctx => {
+const updateUser = async ctx => {
+  const userService = new UserService();
   const { id } = ctx.params;
   const newUser = ctx.request.body;
-  ctx.response.body = await UserService.updateUser(id, newUser);
+  ctx.response.body = await userService.updateUser(id, newUser);
+};
+
+module.exports = {
+  createUser,
+  deleteUser,
+  user,
+  users,
+  updateUser
 };

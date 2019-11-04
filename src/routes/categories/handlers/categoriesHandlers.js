@@ -1,28 +1,38 @@
-const CategoryService = new (require('../../../services/category'))();
+const CategoryService = require('../../../services/category');
 
 const getCategories = async ctx => {
-    ctx.response.body = await CategoryService.getCategories();
+    const categoryService = new CategoryService();
+
+    ctx.response.body = await categoryService.getCategories();
 };
 
 const getCategory = async ctx => {
+    const categoryService = new CategoryService();
     const { id } = ctx.params;
-    ctx.response.body = await CategoryService.getCategory(id); 
+
+    ctx.response.body = await categoryService.getCategory(id); 
 };
 
 const createCategory = async ctx => {
+    const categoryService = new CategoryService();
     const newCategory = ctx.request.body;
-    ctx.response.body = await CategoryService.createCategory(newCategory);
+
+    ctx.response.body = await categoryService.createCategory(newCategory);
 };
 
 const updateCategory = async ctx => {
+    const categoryService = new CategoryService();
     const { id } = ctx.params;
     const updatedCategory = ctx.request.body;
-    ctx.response.body = await CategoryService.updateCategory(id, updatedCategory);
+
+    ctx.response.body = await categoryService.updateCategory(id, updatedCategory);
 };
 
 const deleteCategory = async ctx => {
+    const categoryService = new CategoryService();
     const {id} = ctx.params;
-    ctx.response.body = await CategoryService.deleteCategory(id);
+
+    ctx.response.body = await categoryService.deleteCategory(id);
 };
 
 module.exports = {
@@ -31,4 +41,4 @@ module.exports = {
     createCategory,
     updateCategory,
     deleteCategory 
-}
+};
