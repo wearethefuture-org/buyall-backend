@@ -1,4 +1,5 @@
 const MailService = require('../../../services/mail');
+const UserService = require('../../../services/user');
 
 const login = async ctx => {
     const mailService = new MailService();
@@ -14,7 +15,9 @@ const login = async ctx => {
 };
 
 const register = async ctx => {
-    ctx.response.body = 'register';
+    const userService = new UserService();
+    const newUser = ctx.request.body;
+    ctx.response.body = await userService.createUser(newUser);
 };
 
 const confirmRegistration = async ctx => {
