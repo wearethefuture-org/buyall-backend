@@ -13,6 +13,14 @@ class UserService extends BaseModel {
     });
   }
 
+  async getUserByEmail(email) {
+    return this.model.users.findAll({
+      where: {
+        email
+      }
+    });
+  }
+
   async createUser(user) {
     return this.model.users.create(user);
   }

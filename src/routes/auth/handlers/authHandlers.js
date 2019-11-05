@@ -5,7 +5,25 @@ const RenderHTMLService = require('../../../services/renderHTML');
 const bcrypt = require('bcrypt');
 
 const login = async ctx => {
-    ctx.response.body = ctx.request.body;
+    const userService = new UserService();
+
+    const { email, password } = ctx.request.body;
+    const user = (await userService.getUserByEmail(email))[0];
+
+    if (user) {
+        await bcrypt.compare(password, user.password)
+        .then((result) => {
+            if (result) {
+                ctx.response.body = user;
+            } else {
+                ctx.response.status = 403;
+                ctx.response.body = {Error: 'Bad username or password'};
+            }
+        });
+    } else {
+        ctx.response.status = 403;
+        ctx.response.body = {Error: 'User is unregistered'};
+    }
 };
 
 const register = async ctx => {
