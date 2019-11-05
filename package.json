@@ -21,6 +21,7 @@
     "koa-combine-routers": "^4.0.2",
     "koa-compose": "^4.1.0",
     "koa-helmet": "^5.2.0",
+    "koa-pug": "^4.0.2",
     "mysql2": "^2.0.0",
     "nodemailer": "^6.3.1",
     "nodemailer-sendgrid-transport": "^0.2.0",
