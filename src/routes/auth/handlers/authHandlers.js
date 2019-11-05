@@ -2,9 +2,10 @@ const MailService = require('../../../services/mail');
 const UserService = require('../../../services/user');
 const UsersKeysService = require('../../../services/usersKeys');
 const RenderHTMLService = require('../../../services/renderHTML');
+const bcrypt = require('bcrypt');
 
 const login = async ctx => {
-    ctx.response.body = 'login';
+    ctx.response.body = ctx.request.body;
 };
 
 const register = async ctx => {
@@ -14,13 +15,19 @@ const register = async ctx => {
     const mailService = new MailService();
 
     const newUser = ctx.request.body;
+    await bcrypt.hash(newUser.password, +process.env.saltRounds)
+    .then((hash) => {
+        newUser.password = hash;
+    });
+
     const createdUser = await userService.createUser(newUser);
     const key = await userKeysService.createUserKey(createdUser.id); 
-
     const html = await renderHTMLService.render('index', {
-        name: createdUser.first_name,
-        url: `http://localhost:3004/auth/confirm/${key.key}`
+        name: createdUser.firstName,
+        url: `http://localhost:4200/auth/confirm/${key.key}`
     });
+
+    ctx.response.body = ctx.request.body;
 
     const mail = {
         from: 'buyall@gmail.com',
