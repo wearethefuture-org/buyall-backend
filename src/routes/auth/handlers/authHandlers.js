@@ -38,15 +38,22 @@ const register = async ctx => {
         newUser.password = hash;
     });
 
-    const createdUser = await userService.createUser(newUser);
+    let createdUser = null;
+    await userService.createUser(newUser)
+    .then(user => {
+        createdUser = user;
+    })
+    .catch(err => {
+        ctx.response.status = 409;
+        ctx.response.body = {Error: 'User already has registered.'};
+    })
+
     const key = await userKeysService.createUserKey(createdUser.id); 
+
     const html = await renderHTMLService.render('index', {
         name: createdUser.firstName,
         url: `http://localhost:4200/auth/confirm/${key.key}`
     });
-
-    ctx.response.body = ctx.request.body;
-
     const mail = {
         from: 'buyall@gmail.com',
         to: createdUser.email,
