@@ -48,22 +48,28 @@ const register = async ctx => {
         ctx.response.body = {Error: 'User already has registered.'};
     })
 
-    const key = await userKeysService.createUserKey(createdUser.id); 
+    if (createdUser) {
+        const key = await userKeysService.createUserKey(createdUser.id); 
 
-    const html = await renderHTMLService.render('index', {
-        name: createdUser.firstName,
-        url: `http://localhost:4200/auth/confirm/${key.key}`
-    });
-    const mail = {
-        from: 'buyall@gmail.com',
-        to: createdUser.email,
-        subject: 'Email confirmation',
-        text: 'confirm your email',
-        html
+        const html = await renderHTMLService.render('index', {
+            name: createdUser.firstName,
+            url: `http://localhost:4200/auth/confirm/${key.key}`
+        });
+        const mail = {
+            from: 'buyall@gmail.com',
+            to: createdUser.email,
+            subject: 'Email confirmation',
+            text: 'confirm your email',
+            html
+        }
+        mailService.sendMail(mail)
+
+        const response = {
+            Success: true,
+            User: createdUser
+        };
+        ctx.response.body = response;
     }
-    mailService.sendMail(mail)
-
-    ctx.response.body = createdUser;
 };
 
 const confirmRegistration = async ctx => {
