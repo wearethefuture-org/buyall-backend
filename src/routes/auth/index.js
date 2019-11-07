@@ -9,6 +9,9 @@ router.post('/auth/login', authHandlers.login);
 // register 
 router.post('/auth/register', authHandlers.register);
 
+// send forgot password key on mail 
+router.post('/auth/sendForgot', authHandlers.sendForgotPasswordKey);
+
 // forgot password
 router.post('/auth/forgot', authHandlers.forgotPassword);
 
