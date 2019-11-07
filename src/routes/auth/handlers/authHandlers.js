@@ -17,7 +17,7 @@ const login = async ctx => {
                 ctx.response.body = user;
             } else {
                 ctx.response.status = 403;
-                ctx.response.body = {Error: 'Bad username or password'};
+                ctx.response.body = {Error: 'Bad password'};
             }
         });
     } else {
@@ -45,7 +45,7 @@ const register = async ctx => {
     })
     .catch(err => {
         ctx.response.status = 409;
-        ctx.response.body = {Error: 'User already has registered.'};
+        ctx.response.body = {Error: 'User already has registered'};
     })
 
     if (createdUser) {
@@ -73,16 +73,24 @@ const register = async ctx => {
 };
 
 const confirmRegistration = async ctx => {
-    const { key }= ctx.request.body;
     const userKeysService = new UsersKeysService();
     const userService = new UserService();
+    const { key } = ctx.request.body;
     
     const userKey = (await userKeysService.getUserKey(key))[0];
-    await userService.updateUser(userKey.userId, {
-        status: 'confirmed'
-    });
 
-    ctx.response.body = await userKeysService.deleteUserKey(userKey.id);
+    if (userKey) {
+        await userService.updateUser(userKey.userId, {
+            status: 'confirmed'
+        });
+        await userKeysService.deleteUserKey(userKey.id);
+
+        ctx.response.status = 200;
+        ctx.response.body = {Success: true};
+    } else {
+        ctx.response.status = 409;
+        ctx.response.body = {Success: false};
+    }
 };
 
 const forgotPassword = async ctx => {
