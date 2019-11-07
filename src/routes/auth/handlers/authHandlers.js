@@ -156,6 +156,27 @@ const checkForgotPasswordKey = async ctx => {
     }
 };
 
+const changePassword = async ctx => {
+    const usersForgotPasswordsService = new UsersForgotPasswordsService();
+    const userService = new UserService();
+
+    const { email, key, password } = ctx.request.body;
+
+    const user = (await userService.getUserByEmail(email))[0];
+    const trueKey = (await usersForgotPasswordsService.getForgotPasswordKey(user.id))[0];
+
+    if (key === trueKey.key) {
+        bcrypt.hash(password, +process.env.saltRounds)
+            .then((hash) => {
+                userService.updateUser(user.id, { password: hash });
+            });
+
+        ctx.response.body = true;
+    } else {
+        ctx.response.body = false;
+    }
+};
+
 const forgotPassword = async ctx => {
     ctx.response.body = 'forgot';
 };
@@ -166,5 +187,6 @@ module.exports = {
     confirmRegistration,
     sendForgotPasswordKey,
     checkForgotPasswordKey,
+    changePassword,
     forgotPassword
 }

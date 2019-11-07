@@ -15,6 +15,9 @@ router.post('/auth/sendForgot', authHandlers.sendForgotPasswordKey);
 // check forgot password key 
 router.post('/auth/checkKey', authHandlers.checkForgotPasswordKey);
 
+// change password 
+router.post('/auth/changePassword', authHandlers.changePassword);
+
 // forgot password
 router.post('/auth/forgot', authHandlers.forgotPassword);
 
