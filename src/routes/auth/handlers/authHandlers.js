@@ -140,6 +140,22 @@ const sendForgotPasswordKey = async ctx => {
     }
 };
 
+const checkForgotPasswordKey = async ctx => {
+    const usersForgotPasswordsService = new UsersForgotPasswordsService();
+    const userService = new UserService();
+
+    const { email, key } = ctx.request.body;
+
+    const user = (await userService.getUserByEmail(email))[0];
+    const trueKey = (await usersForgotPasswordsService.getForgotPasswordKey(user.id))[0];
+
+    if (key === trueKey.key) {
+        ctx.response.body = true;
+    } else {
+        ctx.response.body = false;
+    }
+};
+
 const forgotPassword = async ctx => {
     ctx.response.body = 'forgot';
 };
@@ -149,5 +165,6 @@ module.exports = {
     register,
     confirmRegistration,
     sendForgotPasswordKey,
+    checkForgotPasswordKey,
     forgotPassword
 }
