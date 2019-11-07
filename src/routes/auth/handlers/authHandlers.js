@@ -2,6 +2,7 @@ const MailService = require('../../../services/mail');
 const UserService = require('../../../services/user');
 const UsersKeysService = require('../../../services/usersKeys');
 const RenderHTMLService = require('../../../services/renderHTML');
+const UsersForgotPasswordsService = require('../../../services/usersForgotPasswords');
 const bcrypt = require('bcrypt');
 
 const login = async ctx => {
@@ -94,6 +95,51 @@ const confirmRegistration = async ctx => {
     }
 };
 
+const sendForgotPasswordKey = async ctx => {
+    const renderHTMLService = new RenderHTMLService();
+    const usersForgotPasswordsService = new UsersForgotPasswordsService();
+    const userService = new UserService();
+    const mailService = new MailService();
+
+
+    const { email } = ctx.request.body;
+    const user = (await userService.getUserByEmail(email))[0];
+
+    if (user) {
+        let forgotPasswordKey = (await usersForgotPasswordsService.getForgotPasswordKey(user.id))[0];
+
+        if (forgotPasswordKey) {
+            const body = {
+                key: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
+            };
+
+            forgotPasswordKey = (await usersForgotPasswordsService.updateForgotPasswordKey(forgotPasswordKey.id, body))[1][0];
+        } else {
+            forgotPasswordKey = await usersForgotPasswordsService.createForgotPasswordKey(user.id);
+        }
+
+        const html = await renderHTMLService.render('passwordKey', {
+            name: user.firstName,
+            email: user.email,
+            key: forgotPasswordKey.key
+        });
+        const mail = {
+            from: 'buyall@gmail.com',
+            to: user.email,
+            subject: 'Forgot password',
+            text: 'forgot password key',
+            html
+        }
+        mailService.sendMail(mail)
+
+        ctx.response.status = 200;
+        ctx.response.body = {Success: true};
+    } else {
+        ctx.response.status = 409;
+        ctx.response.body = {Error: 'Bad user email'};
+    }
+};
+
 const forgotPassword = async ctx => {
     ctx.response.body = 'forgot';
 };
@@ -102,5 +148,6 @@ module.exports = {
     login,
     register,
     confirmRegistration,
+    sendForgotPasswordKey,
     forgotPassword
 }
