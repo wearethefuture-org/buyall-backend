@@ -26,4 +26,18 @@ module.exports = db => {
     targetKey: 'id',
     foreignKey: 'userId',
   });
+
+  db.usersForgotPasswords.belongsTo(db.users, {
+   as: db.aliases.usersForgotPasswords.users,
+    field: 'user_id',
+    targetKey: 'id',
+    foreignKey: 'userId',
+    onDelete: 'CASCADE'
+  });
+  db.users.hasMany(db.usersForgotPasswords, {
+   as: db.aliases.users.usersForgotPasswords,
+    field: 'user_id',
+    targetKey: 'id',
+    foreignKey: 'userId',
+  });
 };

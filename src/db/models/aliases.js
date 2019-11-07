@@ -6,9 +6,13 @@ module.exports = {
     subCategories: 'subCategories'
   },
   users: {
-    usersKeys: 'usersKeys'
+    usersKeys: 'usersKeys',
+    usersForgotPasswords: 'usersForgotPasswords'
   },
   usersKeys: {
+    users: 'users'
+  },
+  usersForgotPasswords: {
     users: 'users'
   }
 };
