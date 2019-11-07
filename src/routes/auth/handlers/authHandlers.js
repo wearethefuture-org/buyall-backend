@@ -14,6 +14,7 @@ const login = async ctx => {
         await bcrypt.compare(password, user.password)
         .then((result) => {
             if (result) {
+                delete user.dataValues.password;
                 ctx.response.body = user;
             } else {
                 ctx.response.status = 403;
