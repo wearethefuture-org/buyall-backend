@@ -18,9 +18,6 @@ router.post('/auth/checkKey', authHandlers.checkForgotPasswordKey);
 // change password 
 router.post('/auth/changePassword', authHandlers.changePassword);
 
-// forgot password
-router.post('/auth/forgot', authHandlers.forgotPassword);
-
 // confirm registration
 router.post('/auth/confirm', authHandlers.confirmRegistration);
 
