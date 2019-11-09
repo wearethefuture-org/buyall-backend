@@ -3,19 +3,19 @@ const subCategoriesHandlers = require('./handlers/sub-categories.js');
 
 const router = new Router();
 
-// get all sub categories
+// Get all sub categories
 router.get('/subCategories', subCategoriesHandlers.getSubCategories);
 
-// get sub category by id
+// Get sub category
 router.get('/subCategory/:id', subCategoriesHandlers.getSubCategory);
 
-// add new sub category
+// Create new sub category
 router.post('/subCategory', subCategoriesHandlers.createtSubCategory);
 
-// update sub category
+// Update sub category
 router.put('/subCategory/:id', subCategoriesHandlers.updateSubCategory);
 
-// delete sub category by id
+// Delete sub category by id
 router.delete('/subCategory/:id', subCategoriesHandlers.deleteSubCategory);
 
 module.exports = router;

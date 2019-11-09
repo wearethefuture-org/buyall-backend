@@ -1,5 +1,6 @@
 const database = require('../services/database');
 
+// Connecting to database
 module.exports = async () => {
   console.info('SETUP - Connecting database...');
 

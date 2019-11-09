@@ -1,3 +1,4 @@
+// Handling all middleware errors
 module.exports = async (ctx, next) => {
   try {
     await next();

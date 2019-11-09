@@ -1,5 +1,6 @@
 const { NODE_ENV, PORT } = require('../config/env');
 
+// Starting server
 module.exports = app => {
   console.info('SETUP - Starting server..');
 

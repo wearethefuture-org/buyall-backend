@@ -6,8 +6,11 @@ const setupServer = require('./setup/server');
 
 const app = new Koa();
 
+// Setup middlewares
 setupMiddlewares(app);
 
+// Setup database
 setupDatabase();
 
+// Setup server
 setupServer(app);

@@ -7,6 +7,7 @@ const router = require('../routes');
 
 const { URL } = require('../config/env');
 
+// Applying all middlewares
 module.exports = app => {
   console.info('SETUP - Loading middlewares...');
 

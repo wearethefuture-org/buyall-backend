@@ -1,5 +1,6 @@
 const compose = require('koa-compose');
 
+// Combining routers to one middleware
 function combineRouters(routers) {
   const middleware = [];
 
