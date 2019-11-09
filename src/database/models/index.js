@@ -5,26 +5,10 @@ const Sequelize = require('sequelize');
 const aliases = require('./aliases');
 const relations = require('./relations');
 
-const {
-  databaseName,
-  username,
-  password,
-  host
-} = require('../../utils/config');
+const sequelize = require('../../services/database');
 
 const basename = path.basename(__filename);
 const db = {};
-
-const sequelize = new Sequelize(databaseName, username, password, {
-  host,
-  dialect: 'postgres',
-  pool: {
-    max: 5,
-    min: 0,
-    acquire: 30000,
-    idle: 10000
-  }
-});
 
 fs.readdirSync(`${__dirname}/sources`)
   .filter(file => {

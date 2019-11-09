@@ -1,16 +1,18 @@
-const combineRouters = require('../utils/combineRouters');
+const combineRouters = require('../helpers/combine-routers');
 
-// user routes
+// User routes
 const usersRouter = require('./users');
-// category routes
+
+// Category routes
 const categoriesRouter = require('./categories');
-// sub category routes
-const subCategoriesRouter = require('./subCategories');
+
+// Sub category routes
+const subCategoriesRouter = require('./sub-categories');
 
 const router = combineRouters([
-    usersRouter,
-    categoriesRouter,
-    subCategoriesRouter
+  usersRouter,
+  categoriesRouter,
+  subCategoriesRouter
 ]);
 
 module.exports = router;

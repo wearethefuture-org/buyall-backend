@@ -3,7 +3,7 @@ const {
   password,
   databaseName,
   host
-} = require('./src/utils/config');
+} = require('./src/helpers/config');
 
 module.exports = {
   development: {

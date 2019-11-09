@@ -1,4 +1,4 @@
-const BaseModel = require('./baseModel');
+const BaseModel = require('./base-model');
 
 class UserService extends BaseModel {
   async getUsers() {

@@ -1,12 +1,12 @@
 const Router = require('@koa/router');
-const categoriesHandlers = require('./handlers/categoriesHandlers.js');
+const categoriesHandlers = require('./handlers/categories.js');
 
 const router = new Router();
 
-// get all categories with sub categories 
+// get all categories with sub categories
 router.get('/categories', categoriesHandlers.getCategories);
 
-// get category by id 
+// get category by id
 router.get('/category/:id', categoriesHandlers.getCategory);
 
 // add new category
