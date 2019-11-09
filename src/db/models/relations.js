@@ -1,10 +1,4 @@
 module.exports = db => {
-  // db.users.belongsTo(db.usersRoles, {
-  //  as: db.aliases.user.role,
-  //   field: 'role_id',
-  //   foreignKey: 'roleId'
-  // });
-
   db.subCategories.belongsTo(db.categories, {
    as: db.aliases.subCategories.categories,
     field: 'category_id',
@@ -17,5 +11,33 @@ module.exports = db => {
     field: 'category_id',
     targetKey: 'id',
     foreignKey: 'categoryId',
+  });
+
+  db.usersKeys.belongsTo(db.users, {
+   as: db.aliases.usersKeys.users,
+    field: 'user_id',
+    targetKey: 'id',
+    foreignKey: 'userId',
+    onDelete: 'CASCADE'
+  });
+  db.users.hasMany(db.usersKeys, {
+   as: db.aliases.users.usersKeys,
+    field: 'user_id',
+    targetKey: 'id',
+    foreignKey: 'userId',
+  });
+
+  db.usersForgotPasswords.belongsTo(db.users, {
+   as: db.aliases.usersForgotPasswords.users,
+    field: 'user_id',
+    targetKey: 'id',
+    foreignKey: 'userId',
+    onDelete: 'CASCADE'
+  });
+  db.users.hasMany(db.usersForgotPasswords, {
+   as: db.aliases.users.usersForgotPasswords,
+    field: 'user_id',
+    targetKey: 'id',
+    foreignKey: 'userId',
   });
 };
