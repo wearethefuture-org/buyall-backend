@@ -1,10 +1,4 @@
-const MailService = require('../../../services/mail');
-const UserService = require('../../../services/user');
-const UsersKeysService = require('../../../services/usersKeys');
-const RenderHTMLService = require('../../../services/renderHTML');
-const UsersForgotPasswordsService = require('../../../services/usersForgotPasswords');
 const AuthService = require('../../../services/auth');
-const bcrypt = require('bcrypt');
 
 const login = async ctx => {
     const authService = new AuthService();
@@ -83,4 +77,4 @@ module.exports = {
     sendForgotPasswordKey,
     checkForgotPasswordKey,
     changePassword
-}
+};
