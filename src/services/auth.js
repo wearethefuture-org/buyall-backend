@@ -11,20 +11,10 @@ class AuthService extends BaseModel {
     async login(user) {
         const userService = new UserService();
 
-        let dbUser = null;
-        try {
-            dbUser = (await userService.getUserByEmail(user.email))[0];
-        } catch (error) {
-            throw 'Invalid email';
-        };
+        const dbUser = (await userService.getUserByEmail(user.email))[0];
 
         if (dbUser) {
-            let compared = null;
-            try {
-                compared = await bcrypt.compare(user.password, dbUser.password);
-            } catch (error) {
-                throw 'Invalid password';
-            };
+            const compared = await bcrypt.compare(user.password, dbUser.password);
 
             if (compared) {
                 delete dbUser.dataValues.password;
@@ -43,18 +33,14 @@ class AuthService extends BaseModel {
         const userKeysService = new UsersKeysService();
         const mailService = new MailService();
 
-        try {
-            user.password = await bcrypt.hash(user.password, +process.env.saltRounds);
-        } catch (error) {
-            throw 'Invalid credits';
-        };
+        user.password = await bcrypt.hash(user.password, +process.env.saltRounds);
 
         try {
             user = await userService.createUser(user);
         } catch (error) {
             switch (error.message) {
                 case 'повторяющееся значение ключа нарушает ограничение уникальности "users_email_key"': {
-                    throw 'User already registered';
+                    throw 'User has already registered';
                 }
                 default: {
                     throw 'Invalid credits';
