@@ -7,6 +7,35 @@ const RenderHTMLService = require('./renderHTML');
 const bcrypt = require('bcrypt');
 
 class AuthService extends BaseModel {
+    async login(user) {
+        const userService = new UserService();
+
+        let dbUser = null;
+        try {
+            dbUser = (await userService.getUserByEmail(user.email))[0];
+        } catch (error) {
+            throw 'Invalid email';
+        };
+
+        if (dbUser) {
+            let compared = null;
+            try {
+                compared = await bcrypt.compare(user.password, dbUser.password);
+            } catch (error) {
+                throw 'Invalid password';
+            };
+
+            if (compared) {
+                delete dbUser.dataValues.password;
+                return dbUser;
+            } else {
+                throw 'Bad password';
+            };
+        } else {
+            throw 'User is unregistered';
+        };
+    }
+
     async register(user) {
         const renderHTMLService = new RenderHTMLService();
         const userService = new UserService();

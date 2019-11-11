@@ -7,26 +7,18 @@ const AuthService = require('../../../services/auth');
 const bcrypt = require('bcrypt');
 
 const login = async ctx => {
-    const userService = new UserService();
+    const authService = new AuthService();
+    const user = {
+        email: ctx.request.body.email,
+        password: ctx.request.body.password
+    };
 
-    const { email, password } = ctx.request.body;
-    const user = (await userService.getUserByEmail(email))[0];
-
-    if (user) {
-        await bcrypt.compare(password, user.password)
-        .then((result) => {
-            if (result) {
-                delete user.dataValues.password;
-                ctx.response.body = user;
-            } else {
-                ctx.response.status = 500;
-                ctx.response.body = 'Bad password';
-            }
-        });
-    } else {
+    try {
+        ctx.response.body = await authService.login(user);
+    } catch (error) {
         ctx.response.status = 500;
-        ctx.response.body = 'User is unregistered';
-    }
+        ctx.response.body = error;
+    };
 };
 
 const register = async ctx => {
