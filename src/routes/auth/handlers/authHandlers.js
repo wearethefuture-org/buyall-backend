@@ -53,50 +53,27 @@ const sendForgotPasswordKey = async ctx => {
 };
 
 const checkForgotPasswordKey = async ctx => {
-    const usersForgotPasswordsService = new UsersForgotPasswordsService();
-    const userService = new UserService();
-
+    const authService = new AuthService();
     const { email, key } = ctx.request.body;
 
-    const user = (await userService.getUserByEmail(email))[0];
-    const trueKey = (await usersForgotPasswordsService.getForgotPasswordKey(user.id))[0];
-
-    if (user) {
-        if (key === trueKey.key) {
-            ctx.response.body = true;
-        } else {
-            ctx.response.body = false;
-        }
-    } else {
+    try {
+        ctx.response.body = await authService.checkForgotPasswordKey(email, key);
+    } catch (error) {
         ctx.response.status = 500;
-        ctx.response.body = 'Bad user email';
-    }
+        ctx.response.body = error;
+    };
 };
 
 const changePassword = async ctx => {
-    const usersForgotPasswordsService = new UsersForgotPasswordsService();
-    const userService = new UserService();
-
+    const authService = new AuthService();
     const { email, key, password } = ctx.request.body;
 
-    const user = (await userService.getUserByEmail(email))[0];
-    const trueKey = (await usersForgotPasswordsService.getForgotPasswordKey(user.id))[0];
-
-    if (user) {
-        if (key === trueKey.key) {
-            bcrypt.hash(password, +process.env.saltRounds)
-                .then((hash) => {
-                    userService.updateUser(user.id, { password: hash });
-                });
-
-            ctx.response.body = true;
-        } else {
-            ctx.response.body = false;
-        }
-    } else {
+    try {
+        ctx.response.body = await authService.changePassword(email, key, password);
+    } catch (error) {
         ctx.response.status = 500;
-        ctx.response.body = 'Bad user email';
-    }
+        ctx.response.body = error;
+    };
 };
 
 module.exports = {

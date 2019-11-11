@@ -135,6 +135,46 @@ class AuthService extends BaseModel {
             throw 'Email is unregistered';
         };
     }
+
+    async checkForgotPasswordKey(email, key) {
+        const usersForgotPasswordsService = new UsersForgotPasswordsService();
+        const userService = new UserService();
+
+        const user = (await userService.getUserByEmail(email))[0];
+        
+        if (user) {
+            const trueKey = (await usersForgotPasswordsService.getForgotPasswordKey(user.id))[0];
+
+            if (key === trueKey.key) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            throw 'Email is unregistered';
+        };
+    }
+
+    async changePassword(email, key, password) {
+        const usersForgotPasswordsService = new UsersForgotPasswordsService();
+        const userService = new UserService();
+        const user = (await userService.getUserByEmail(email))[0];
+
+        if (user) {
+            const trueKey = (await usersForgotPasswordsService.getForgotPasswordKey(user.id))[0];
+
+            if (key === trueKey.key) {
+                const hash = await bcrypt.hash(password, +process.env.saltRounds);
+                userService.updateUser(user.id, { password: hash });
+
+                return true;
+            } else {
+                return false;
+            };
+        } else {
+            throw 'Email is unregistered';
+        }
+    }
 }
 
 module.exports = AuthService;
