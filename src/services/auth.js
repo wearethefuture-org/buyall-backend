@@ -79,6 +79,22 @@ class AuthService extends BaseModel {
         delete user.dataValues.password;
         return user;
     }
+
+    async confirmRegistration(key) {
+        const userKeysService = new UsersKeysService();
+        const userService = new UserService();
+
+        const userKey = (await userKeysService.getUserKey(key))[0];
+
+        if (userKey) {
+            userService.updateUser(userKey.userId, {status: 'confirmed'});
+            userKeysService.deleteUserKey(userKey.id);
+
+            return true;
+        } else {
+            return false;
+        };
+    }
 }
 
 module.exports = AuthService;
