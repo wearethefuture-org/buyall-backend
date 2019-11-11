@@ -1,0 +1,44 @@
+doctype html
+html
+    head
+        style.
+            .wrapper {
+                text-align: center;
+                background-color: #FDFDFD;
+                height: 100%;
+            }
+
+            .content {
+                width: 80%;
+                margin: 0 auto;
+            }
+
+            h1 {
+                font-size: 35px;
+                font-weight: bold;
+                color: #000;
+            }
+
+            p {
+                width: 40%;
+                margin: 0 auto 40px auto;
+                font-size: 24px;
+                color: #000;
+                line-height: 25px;
+                opacity: 0.8;
+            }
+    
+            a {
+                color: #fff !important;
+                text-decoration: none;
+                background-color: #FFB301;
+                padding: 20px 30px;
+                font-size: 24px;
+                border-radius: 4px;
+            }
+    body
+        div.wrapper
+            div.content
+                h1 Email Confirmation
+                p Hi,#{name}, you are almost ready to start use buyall.Simply click the big yellow button below to vefiry your email address.
+                a(href=`${url}`) Verify email address

@@ -41,6 +41,11 @@ module.exports = {
         defaultValue: false,
         field: 'disabled'
       },
+      dateBirthday: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        field: 'birthday_date'
+      },
       createdAt: {
         type: DataTypes.DATE,
         allowNull: false,
