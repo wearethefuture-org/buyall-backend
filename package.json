@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node src/app.js",
     "dev": "nodemon src/app.js",
+    "start:dev": "DEBUG='app*,critical*,info*,warning*,security,system*' NODE_ENV=local nodemon --inspect ./src/app.js",
     "db:migrate": "DEBUG='app*,critical*,info*,warning*,security*' sequelize db:migrate"
   },
   "keywords": [],
