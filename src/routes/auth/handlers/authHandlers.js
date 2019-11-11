@@ -3,6 +3,7 @@ const UserService = require('../../../services/user');
 const UsersKeysService = require('../../../services/usersKeys');
 const RenderHTMLService = require('../../../services/renderHTML');
 const UsersForgotPasswordsService = require('../../../services/usersForgotPasswords');
+const AuthService = require('../../../services/auth');
 const bcrypt = require('bcrypt');
 
 const login = async ctx => {
@@ -29,46 +30,15 @@ const login = async ctx => {
 };
 
 const register = async ctx => {
-    const renderHTMLService = new RenderHTMLService();
-    const userService = new UserService();
-    const userKeysService = new UsersKeysService();
-    const mailService = new MailService();
+    const authService = new AuthService();
+    const user = ctx.request.body;
 
-    let user = ctx.request.body;
-    await bcrypt.hash(user.password, +process.env.saltRounds)
-    .then((hash) => {
-        user.password = hash;
-    });
-
-    let createdUser = null;
-    await userService.createUser(user)
-    .then(data => {
-        createdUser = data;
-    })
-    .catch(err => {
+    try {
+        ctx.response.body = await authService.register(user);
+    } catch (error) {
         ctx.response.status = 500;
-        ctx.response.body = 'User already has registered';
-    })
-
-    if (createdUser) {
-        const key = await userKeysService.createUserKey(createdUser.id); 
-
-        const html = await renderHTMLService.render('index', {
-            name: createdUser.firstName,
-            url: `http://localhost:4200/auth/confirm/${key.key}`
-        });
-        const mail = {
-            from: 'buyall@gmail.com',
-            to: createdUser.email,
-            subject: 'Email confirmation',
-            text: 'confirm your email',
-            html
-        }
-        mailService.sendMail(mail)
-
-        delete createdUser.dataValues.password;
-        ctx.response.body = createdUser;
-    }
+        ctx.response.body = error;
+    };
 };
 
 const confirmRegistration = async ctx => {
