@@ -5,9 +5,6 @@ const root = path.join.bind(this, __dirname, '../../');
 
 let env = '';
   switch (process.env.NODE_ENV) {
-    case 'local':
-      env = '';
-      break;
     case 'dev':
       env = 'dev';
       break;
