@@ -2,7 +2,23 @@ const dotenv = require('dotenv');
 const path = require('path');
 
 const root = path.join.bind(this, __dirname, '../../');
-dotenv.config({ path: root('.env') });
+
+let env = '';
+  switch (process.env.NODE_ENV) {
+    case 'local':
+      env = '';
+      break;
+    case 'dev':
+      env = 'dev';
+      break;
+    case 'production':
+      env = 'prod';
+      break;
+    default:
+      break;
+  }
+
+dotenv.config({ path: root(`${env}.env`) });
 
 // Port and URL
 exports.url = process.env.URL;
