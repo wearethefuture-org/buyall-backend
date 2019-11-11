@@ -34,23 +34,10 @@ const register = async ctx => {
 };
 
 const confirmRegistration = async ctx => {
-    const userKeysService = new UsersKeysService();
-    const userService = new UserService();
+    const authService = new AuthService();
     const { key } = ctx.request.body;
-    
-    const userKey = (await userKeysService.getUserKey(key))[0];
 
-    if (userKey) {
-        await userService.updateUser(userKey.userId, {
-            status: 'confirmed'
-        });
-        await userKeysService.deleteUserKey(userKey.id);
-
-        ctx.response.body = true;
-    } else {
-        ctx.response.status = 500;
-        ctx.response.body = false;
-    }
+    ctx.response.body = await authService.confirmRegistration(key);
 };
 
 const sendForgotPasswordKey = async ctx => {
