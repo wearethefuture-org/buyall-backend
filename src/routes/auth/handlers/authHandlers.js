@@ -41,44 +41,15 @@ const confirmRegistration = async ctx => {
 };
 
 const sendForgotPasswordKey = async ctx => {
-    const renderHTMLService = new RenderHTMLService();
-    const usersForgotPasswordsService = new UsersForgotPasswordsService();
-    const userService = new UserService();
-    const mailService = new MailService();
-
+    const authService = new AuthService();
     const { email } = ctx.request.body;
-    const user = (await userService.getUserByEmail(email))[0];
 
-    if (user) {
-        let forgotPasswordKey = (await usersForgotPasswordsService.getForgotPasswordKey(user.id))[0];
-
-        if (forgotPasswordKey) {
-            const key = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-
-            forgotPasswordKey = (await usersForgotPasswordsService.updateForgotPasswordKey(forgotPasswordKey.id, {key}))[1][0];
-        } else {
-            forgotPasswordKey = await usersForgotPasswordsService.createForgotPasswordKey(user.id);
-        }
-
-        const html = await renderHTMLService.render('passwordKey', {
-            name: user.firstName,
-            email: user.email,
-            key: forgotPasswordKey.key
-        });
-        const mail = {
-            from: 'buyall@gmail.com',
-            to: user.email,
-            subject: 'Forgot password',
-            text: 'forgot password key',
-            html
-        }
-        mailService.sendMail(mail)
-
-        ctx.response.body = true;
-    } else {
+    try {
+        ctx.response.body = await authService.sendForgotPasswordKey(email);
+    } catch (error) {
         ctx.response.status = 500;
-        ctx.response.body = 'Bad user email';
-    }
+        ctx.response.body = error;
+    };
 };
 
 const checkForgotPasswordKey = async ctx => {

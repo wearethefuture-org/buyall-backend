@@ -3,6 +3,7 @@ const BaseModel = require('./baseModel');
 const MailService = require('./mail');
 const UserService = require('./user');
 const UsersKeysService = require('./usersKeys');
+const UsersForgotPasswordsService = require('./usersForgotPasswords');
 const RenderHTMLService = require('./renderHTML');
 const bcrypt = require('bcrypt');
 
@@ -93,6 +94,45 @@ class AuthService extends BaseModel {
             return true;
         } else {
             return false;
+        };
+    }
+
+    async sendForgotPasswordKey(email) {
+        const renderHTMLService = new RenderHTMLService();
+        const usersForgotPasswordsService = new UsersForgotPasswordsService();
+        const userService = new UserService();
+        const mailService = new MailService();
+
+        const user = (await userService.getUserByEmail(email))[0];
+
+        if (user) {
+            let forgotPasswordKey = (await usersForgotPasswordsService.getForgotPasswordKey(user.id))[0];
+
+            if (forgotPasswordKey) {
+                const key = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+
+                forgotPasswordKey = (await usersForgotPasswordsService.updateForgotPasswordKey(forgotPasswordKey.id, {key}))[1][0];
+            } else {
+                forgotPasswordKey = await usersForgotPasswordsService.createForgotPasswordKey(user.id);
+            };
+
+            const html = await renderHTMLService.render('passwordKey', {
+                name: user.firstName,
+                email: user.email,
+                key: forgotPasswordKey.key
+            });
+            const mail = {
+                from: 'buyall@gmail.com',
+                to: user.email,
+                subject: 'Forgot password',
+                text: 'forgot password key',
+                html
+            };
+            mailService.sendMail(mail).then().catch();
+
+            return true;
+        } else {
+            throw 'Email is unregistered';
         };
     }
 }
