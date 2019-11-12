@@ -1,11 +1,11 @@
-const BaseModel = require('./baseModel');
+const bcrypt = require('bcrypt');
 
+const BaseModel = require('./baseModel');
 const MailService = require('./mail');
 const UserService = require('./user');
 const UsersKeysService = require('./usersKeys');
 const UsersForgotPasswordsService = require('./usersForgotPasswords');
 const RenderHTMLService = require('./renderHTML');
-const bcrypt = require('bcrypt');
 
 class AuthService extends BaseModel {
     async login(user) {
@@ -19,11 +19,11 @@ class AuthService extends BaseModel {
             if (compared) {
                 delete dbUser.dataValues.password;
                 return dbUser;
-            } else {
-                throw 'Bad password';
-            };
+            }; 
+
+            throw new Error('Bad password');
         } else {
-            throw 'User is unregistered';
+            throw new Error('User is unregistered');
         };
     }
 
@@ -35,36 +35,37 @@ class AuthService extends BaseModel {
 
         user.password = await bcrypt.hash(user.password, +process.env.saltRounds);
 
+        let createdUser = null;
         try {
-            user = await userService.createUser(user);
+            createdUser = await userService.createUser(user);
         } catch (error) {
             switch (error.message) {
                 case 'повторяющееся значение ключа нарушает ограничение уникальности "users_email_key"': {
-                    throw 'User has already registered';
+                    throw new Error('User has already registered');
                 }
                 default: {
-                    throw 'Invalid credits';
+                    throw new Error('Invalid credits');
                 }
-            }
+            };
         };
 
-        const key = await userKeysService.createUserKey(user.id); 
+        const key = await userKeysService.createUserKey(createdUser.id); 
 
         const html = await renderHTMLService.render('confirmEmail', {
-            name: user.firstName,
+            name: createdUser.firstName,
             url: `${process.env.FRONT_URL}:${process.env.FRONT_PORT}/auth/confirm/${key.key}`
         });
         const mail = {
             from: 'buyall@gmail.com',
-            to: user.email,
+            to: createdUser.email,
             subject: 'Email confirmation',
             text: 'confirm your email',
             html
         };
         mailService.sendMail(mail).then().catch();
 
-        delete user.dataValues.password;
-        return user;
+        delete createdUser.dataValues.password;
+        return createdUser;
     }
 
     async confirmRegistration(key) {
@@ -78,9 +79,8 @@ class AuthService extends BaseModel {
             userKeysService.deleteUserKey(userKey.id);
 
             return true;
-        } else {
-            return false;
-        };
+        } 
+        return false;
     }
 
     async sendForgotPasswordKey(email) {
@@ -117,9 +117,8 @@ class AuthService extends BaseModel {
             mailService.sendMail(mail).then().catch();
 
             return true;
-        } else {
-            throw 'Email is unregistered';
-        };
+        } 
+        throw new Error('Email is unregistered');
     }
 
     async checkForgotPasswordKey(email, key) {
@@ -133,12 +132,10 @@ class AuthService extends BaseModel {
 
             if (key === trueKey.key) {
                 return true;
-            } else {
-                return false;
-            }
-        } else {
-            throw 'Email is unregistered';
-        };
+            } 
+            return false;
+        } 
+        throw new Error('Email is unregistered');
     }
 
     async changePassword(email, key, password) {
@@ -154,12 +151,10 @@ class AuthService extends BaseModel {
                 userService.updateUser(user.id, { password: hash });
 
                 return true;
-            } else {
-                return false;
-            };
-        } else {
-            throw 'Email is unregistered';
-        }
+            } 
+            return false;
+        } 
+        throw new Error('Email is unregistered');
     }
 }
 
