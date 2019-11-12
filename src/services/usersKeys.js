@@ -1,16 +1,17 @@
 const BaseModel = require('./baseModel');
+const generateRandomString = require('../utils/generateRandomString');
 
 class UserKeysService extends BaseModel {
     async createUserKey(id) {
         const body = {
             userId: id,
-            key: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
+            key: generateRandomString()
         }
         return this.model.usersKeys.create(body) 
     }
 
     async getUserKey(key) {
-        return this.model.usersKeys.findAll({
+        return this.model.usersKeys.findOne({
             where: {
                 key 
             }

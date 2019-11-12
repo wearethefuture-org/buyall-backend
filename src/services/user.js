@@ -6,7 +6,7 @@ class UserService extends BaseModel {
   }
 
   async getUser(id) {
-    return this.model.users.findAll({
+    return this.model.users.findOne({
       where: {
         id
       }
@@ -14,7 +14,7 @@ class UserService extends BaseModel {
   }
 
   async getUserByEmail(email) {
-    return this.model.users.findAll({
+    return this.model.users.findOne({
       where: {
         email
       }

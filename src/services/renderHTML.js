@@ -1,6 +1,6 @@
-const BaseModel = require('./baseModel');
 const Pug = require('koa-pug')
 const path = require('path')
+const BaseModel = require('./baseModel');
 
 class RenderHTMLService extends BaseModel {
     constructor() {

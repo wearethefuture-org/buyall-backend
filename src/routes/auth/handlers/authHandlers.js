@@ -1,182 +1,74 @@
-const MailService = require('../../../services/mail');
-const UserService = require('../../../services/user');
-const UsersKeysService = require('../../../services/usersKeys');
-const RenderHTMLService = require('../../../services/renderHTML');
-const UsersForgotPasswordsService = require('../../../services/usersForgotPasswords');
-const bcrypt = require('bcrypt');
+const AuthService = require('../../../services/auth');
 
 const login = async ctx => {
-    const userService = new UserService();
+    const authService = new AuthService();
 
-    const { email, password } = ctx.request.body;
-    const user = (await userService.getUserByEmail(email))[0];
+    const user = {
+        email: ctx.request.body.email,
+        password: ctx.request.body.password
+    };
 
-    if (user) {
-        await bcrypt.compare(password, user.password)
-        .then((result) => {
-            if (result) {
-                delete user.dataValues.password;
-                ctx.response.body = user;
-            } else {
-                ctx.response.status = 500;
-                ctx.response.body = 'Bad password';
-            }
-        });
-    } else {
+    try {
+        ctx.response.body = await authService.login(user);
+    } catch (error) {
         ctx.response.status = 500;
-        ctx.response.body = 'User is unregistered';
-    }
+        ctx.response.body = error.message;
+    };
 };
 
 const register = async ctx => {
-    const renderHTMLService = new RenderHTMLService();
-    const userService = new UserService();
-    const userKeysService = new UsersKeysService();
-    const mailService = new MailService();
+    const authService = new AuthService();
+    const user = ctx.request.body;
 
-    let user = ctx.request.body;
-    await bcrypt.hash(user.password, +process.env.saltRounds)
-    .then((hash) => {
-        user.password = hash;
-    });
-
-    let createdUser = null;
-    await userService.createUser(user)
-    .then(data => {
-        createdUser = data;
-    })
-    .catch(err => {
+    try {
+        ctx.response.body = await authService.register(user);
+    } catch (error) {
         ctx.response.status = 500;
-        ctx.response.body = 'User already has registered';
-    })
-
-    if (createdUser) {
-        const key = await userKeysService.createUserKey(createdUser.id); 
-
-        const html = await renderHTMLService.render('index', {
-            name: createdUser.firstName,
-            url: `http://localhost:4200/auth/confirm/${key.key}`
-        });
-        const mail = {
-            from: 'buyall@gmail.com',
-            to: createdUser.email,
-            subject: 'Email confirmation',
-            text: 'confirm your email',
-            html
-        }
-        mailService.sendMail(mail)
-
-        delete createdUser.dataValues.password;
-        ctx.response.body = createdUser;
-    }
+        ctx.response.body = error.message;
+    };
 };
 
 const confirmRegistration = async ctx => {
-    const userKeysService = new UsersKeysService();
-    const userService = new UserService();
+    const authService = new AuthService();
     const { key } = ctx.request.body;
-    
-    const userKey = (await userKeysService.getUserKey(key))[0];
 
-    if (userKey) {
-        await userService.updateUser(userKey.userId, {
-            status: 'confirmed'
-        });
-        await userKeysService.deleteUserKey(userKey.id);
-
-        ctx.response.body = true;
-    } else {
-        ctx.response.status = 500;
-        ctx.response.body = false;
-    }
+    ctx.response.body = await authService.confirmRegistration(key);
 };
 
 const sendForgotPasswordKey = async ctx => {
-    const renderHTMLService = new RenderHTMLService();
-    const usersForgotPasswordsService = new UsersForgotPasswordsService();
-    const userService = new UserService();
-    const mailService = new MailService();
-
+    const authService = new AuthService();
     const { email } = ctx.request.body;
-    const user = (await userService.getUserByEmail(email))[0];
 
-    if (user) {
-        let forgotPasswordKey = (await usersForgotPasswordsService.getForgotPasswordKey(user.id))[0];
-
-        if (forgotPasswordKey) {
-            const key = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-
-            forgotPasswordKey = (await usersForgotPasswordsService.updateForgotPasswordKey(forgotPasswordKey.id, {key}))[1][0];
-        } else {
-            forgotPasswordKey = await usersForgotPasswordsService.createForgotPasswordKey(user.id);
-        }
-
-        const html = await renderHTMLService.render('passwordKey', {
-            name: user.firstName,
-            email: user.email,
-            key: forgotPasswordKey.key
-        });
-        const mail = {
-            from: 'buyall@gmail.com',
-            to: user.email,
-            subject: 'Forgot password',
-            text: 'forgot password key',
-            html
-        }
-        mailService.sendMail(mail)
-
-        ctx.response.body = true;
-    } else {
+    try {
+        ctx.response.body = await authService.sendForgotPasswordKey(email);
+    } catch (error) {
         ctx.response.status = 500;
-        ctx.response.body = 'Bad user email';
-    }
+        ctx.response.body = error.message;
+    };
 };
 
 const checkForgotPasswordKey = async ctx => {
-    const usersForgotPasswordsService = new UsersForgotPasswordsService();
-    const userService = new UserService();
-
+    const authService = new AuthService();
     const { email, key } = ctx.request.body;
 
-    const user = (await userService.getUserByEmail(email))[0];
-    const trueKey = (await usersForgotPasswordsService.getForgotPasswordKey(user.id))[0];
-
-    if (user) {
-        if (key === trueKey.key) {
-            ctx.response.body = true;
-        } else {
-            ctx.response.body = false;
-        }
-    } else {
+    try {
+        ctx.response.body = await authService.checkForgotPasswordKey(email, key);
+    } catch (error) {
         ctx.response.status = 500;
-        ctx.response.body = 'Bad user email';
-    }
+        ctx.response.body = error.message;
+    };
 };
 
 const changePassword = async ctx => {
-    const usersForgotPasswordsService = new UsersForgotPasswordsService();
-    const userService = new UserService();
-
+    const authService = new AuthService();
     const { email, key, password } = ctx.request.body;
 
-    const user = (await userService.getUserByEmail(email))[0];
-    const trueKey = (await usersForgotPasswordsService.getForgotPasswordKey(user.id))[0];
-
-    if (user) {
-        if (key === trueKey.key) {
-            bcrypt.hash(password, +process.env.saltRounds)
-                .then((hash) => {
-                    userService.updateUser(user.id, { password: hash });
-                });
-
-            ctx.response.body = true;
-        } else {
-            ctx.response.body = false;
-        }
-    } else {
+    try {
+        ctx.response.body = await authService.changePassword(email, key, password);
+    } catch (error) {
         ctx.response.status = 500;
-        ctx.response.body = 'Bad user email';
-    }
+        ctx.response.body = error.message;
+    };
 };
 
 module.exports = {
@@ -186,4 +78,4 @@ module.exports = {
     sendForgotPasswordKey,
     checkForgotPasswordKey,
     changePassword
-}
+};

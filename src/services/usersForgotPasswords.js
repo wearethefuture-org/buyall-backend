@@ -1,25 +1,25 @@
 const BaseModel = require('./baseModel');
+const generateRandomString = require('../utils/generateRandomString');
 
 class UsersForgotPasswordsService extends BaseModel {
     async createForgotPasswordKey(id) {
         const body = {
             userId: id,
-            key: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
-        }
-        return this.model.usersForgotPasswords.create(body) 
+            key: generateRandomString()
+        };
+        return this.model.usersForgotPasswords.create(body);
     }
 
     async updateForgotPasswordKey(id, key) {
         return this.model.usersForgotPasswords.update(key, {
             where: {
                 id
-            },
-            returning: true,
+            }
         });
     }
 
     async getForgotPasswordKey(userId) {
-        return this.model.usersForgotPasswords.findAll({
+        return this.model.usersForgotPasswords.findOne({
             where: {
                 userId
             }

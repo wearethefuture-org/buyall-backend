@@ -2,7 +2,7 @@ const BaseModel = require('./baseModel');
 
 class SubCategoryService extends BaseModel {
   async getSubCategory(id) {
-    return this.model.subCategories.findAll({
+    return this.model.subCategories.findOne({
       where: {
         id
       }
