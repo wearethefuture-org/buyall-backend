@@ -6,6 +6,7 @@ const UserService = require('./user');
 const UsersKeysService = require('./usersKeys');
 const UsersForgotPasswordsService = require('./usersForgotPasswords');
 const RenderHTMLService = require('./renderHTML');
+const generateRandomString = require('../utils/generateRandomString');
 
 class AuthService extends BaseModel {
     async login(user) {
@@ -87,7 +88,7 @@ class AuthService extends BaseModel {
             let forgotPasswordKey = await usersForgotPasswordsService.getForgotPasswordKey(user.id);
 
             if (forgotPasswordKey) {
-                const key = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+                const key = generateRandomString();
 
                 forgotPasswordKey.update({key});
             } else {
