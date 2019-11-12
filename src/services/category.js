@@ -3,25 +3,21 @@ const BaseModel = require('./baseModel');
 class CategoryService extends BaseModel {
   async getCategories() {
     return this.model.categories.findAll({
-      // add sub categories belong to category
       include: [{
         model: this.model.subCategories,
-        as: 'subCategories',
-        paranoid: false 
+        as: 'subCategories'
       }]
     });
   }
 
   async getCategory(id) {
-    return this.model.categories.findAll({
+    return this.model.categories.findOne({
       where: {
         id
       },
-      // add sub categories belong to category
       include: [{
         model: this.model.subCategories,
-        as: 'subCategories',
-        paranoid: false 
+        as: 'subCategories'
       }]
     });
   }
