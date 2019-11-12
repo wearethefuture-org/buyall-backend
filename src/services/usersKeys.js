@@ -10,7 +10,7 @@ class UserKeysService extends BaseModel {
     }
 
     async getUserKey(key) {
-        return this.model.usersKeys.findAll({
+        return this.model.usersKeys.findOne({
             where: {
                 key 
             }

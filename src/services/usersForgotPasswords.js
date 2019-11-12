@@ -5,21 +5,20 @@ class UsersForgotPasswordsService extends BaseModel {
         const body = {
             userId: id,
             key: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
-        }
-        return this.model.usersForgotPasswords.create(body) 
+        };
+        return this.model.usersForgotPasswords.create(body);
     }
 
     async updateForgotPasswordKey(id, key) {
         return this.model.usersForgotPasswords.update(key, {
             where: {
                 id
-            },
-            returning: true,
+            }
         });
     }
 
     async getForgotPasswordKey(userId) {
-        return this.model.usersForgotPasswords.findAll({
+        return this.model.usersForgotPasswords.findOne({
             where: {
                 userId
             }
