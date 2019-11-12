@@ -22,7 +22,7 @@ class AuthService extends BaseModel {
         if (compared) {
             delete dbUser.dataValues.password;
             return dbUser;
-        }; 
+        };
 
         throw new Error('Bad password');
     }
@@ -35,21 +35,13 @@ class AuthService extends BaseModel {
 
         user.password = await bcrypt.hash(user.password, +process.env.saltRounds);
 
-        let createdUser = null;
-        try {
-            createdUser = await userService.createUser(user);
-        } catch (error) {
-            switch (error.message) {
-                case 'повторяющееся значение ключа нарушает ограничение уникальности "users_email_key"': {
-                    throw new Error('User has already registered');
-                }
-                default: {
-                    throw new Error('Invalid credits');
-                }
-            };
+        if (await userService.getUserByEmail(user.email)) {
+            throw new Error('User has already registered');
         };
 
-        const key = await userKeysService.createUserKey(createdUser.id); 
+        const createdUser = await userService.createUser(user);
+
+        const key = await userKeysService.createUserKey(createdUser.id);
 
         const html = await renderHTMLService.render('confirmEmail', {
             name: createdUser.firstName,
@@ -79,7 +71,7 @@ class AuthService extends BaseModel {
             userKeysService.deleteUserKey(userKey.id);
 
             return true;
-        } 
+        };
         return false;
     }
 
@@ -117,7 +109,7 @@ class AuthService extends BaseModel {
             mailService.sendMail(mail).then().catch();
 
             return true;
-        } 
+        };
         throw new Error('Email is unregistered');
     }
 
@@ -126,7 +118,7 @@ class AuthService extends BaseModel {
         const userService = new UserService();
 
         const user = await userService.getUserByEmail(email);
-        
+
         if (!user) {
             throw new Error('Email is unregistered');
         };
@@ -135,7 +127,7 @@ class AuthService extends BaseModel {
 
         if (key === trueKey.key) {
             return true;
-        }; 
+        };
         return false;
     }
 
@@ -155,7 +147,7 @@ class AuthService extends BaseModel {
             userService.updateUser(user.id, { password: hash });
 
             return true;
-        }; 
+        };
         return false;
     }
 }
