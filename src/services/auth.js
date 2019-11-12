@@ -13,18 +13,18 @@ class AuthService extends BaseModel {
 
         const dbUser = await userService.getUserByEmail(user.email);
 
-        if (dbUser) {
-            const compared = await bcrypt.compare(user.password, dbUser.password);
-
-            if (compared) {
-                delete dbUser.dataValues.password;
-                return dbUser;
-            }; 
-
-            throw new Error('Bad password');
-        } else {
+        if (!dbUser) {
             throw new Error('User is unregistered');
         };
+
+        const compared = await bcrypt.compare(user.password, dbUser.password);
+
+        if (compared) {
+            delete dbUser.dataValues.password;
+            return dbUser;
+        }; 
+
+        throw new Error('Bad password');
     }
 
     async register(user) {
@@ -127,15 +127,16 @@ class AuthService extends BaseModel {
 
         const user = await userService.getUserByEmail(email);
         
-        if (user) {
-            const trueKey = await usersForgotPasswordsService.getForgotPasswordKey(user.id);
+        if (!user) {
+            throw new Error('Email is unregistered');
+        };
 
-            if (key === trueKey.key) {
-                return true;
-            } 
-            return false;
-        } 
-        throw new Error('Email is unregistered');
+        const trueKey = await usersForgotPasswordsService.getForgotPasswordKey(user.id);
+
+        if (key === trueKey.key) {
+            return true;
+        }; 
+        return false;
     }
 
     async changePassword(email, key, password) {
@@ -143,18 +144,19 @@ class AuthService extends BaseModel {
         const userService = new UserService();
         const user = await userService.getUserByEmail(email);
 
-        if (user) {
-            const trueKey = await usersForgotPasswordsService.getForgotPasswordKey(user.id);
+        if (!user) {
+            throw new Error('Email is unregistered');
+        };
 
-            if (key === trueKey.key) {
-                const hash = await bcrypt.hash(password, +process.env.saltRounds);
-                userService.updateUser(user.id, { password: hash });
+        const trueKey = await usersForgotPasswordsService.getForgotPasswordKey(user.id);
 
-                return true;
-            } 
-            return false;
-        } 
-        throw new Error('Email is unregistered');
+        if (key === trueKey.key) {
+            const hash = await bcrypt.hash(password, +process.env.saltRounds);
+            userService.updateUser(user.id, { password: hash });
+
+            return true;
+        }; 
+        return false;
     }
 }
 
