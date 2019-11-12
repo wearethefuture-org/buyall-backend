@@ -11,7 +11,7 @@ class AuthService extends BaseModel {
     async login(user) {
         const userService = new UserService();
 
-        const dbUser = (await userService.getUserByEmail(user.email));
+        const dbUser = await userService.getUserByEmail(user.email);
 
         if (dbUser) {
             const compared = await bcrypt.compare(user.password, dbUser.password);
@@ -72,7 +72,7 @@ class AuthService extends BaseModel {
         const userKeysService = new UsersKeysService();
         const userService = new UserService();
 
-        const userKey = (await userKeysService.getUserKey(key));
+        const userKey = await userKeysService.getUserKey(key);
 
         if (userKey) {
             userService.updateUser(userKey.userId, {status: 'confirmed'});
@@ -89,10 +89,10 @@ class AuthService extends BaseModel {
         const userService = new UserService();
         const mailService = new MailService();
 
-        const user = (await userService.getUserByEmail(email));
+        const user = await userService.getUserByEmail(email);
 
         if (user) {
-            let forgotPasswordKey = (await usersForgotPasswordsService.getForgotPasswordKey(user.id));
+            let forgotPasswordKey = await usersForgotPasswordsService.getForgotPasswordKey(user.id);
 
             if (forgotPasswordKey) {
                 const key = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
@@ -125,10 +125,10 @@ class AuthService extends BaseModel {
         const usersForgotPasswordsService = new UsersForgotPasswordsService();
         const userService = new UserService();
 
-        const user = (await userService.getUserByEmail(email));
+        const user = await userService.getUserByEmail(email);
         
         if (user) {
-            const trueKey = (await usersForgotPasswordsService.getForgotPasswordKey(user.id));
+            const trueKey = await usersForgotPasswordsService.getForgotPasswordKey(user.id);
 
             if (key === trueKey.key) {
                 return true;
@@ -141,10 +141,10 @@ class AuthService extends BaseModel {
     async changePassword(email, key, password) {
         const usersForgotPasswordsService = new UsersForgotPasswordsService();
         const userService = new UserService();
-        const user = (await userService.getUserByEmail(email));
+        const user = await userService.getUserByEmail(email);
 
         if (user) {
-            const trueKey = (await usersForgotPasswordsService.getForgotPasswordKey(user.id));
+            const trueKey = await usersForgotPasswordsService.getForgotPasswordKey(user.id);
 
             if (key === trueKey.key) {
                 const hash = await bcrypt.hash(password, +process.env.saltRounds);
