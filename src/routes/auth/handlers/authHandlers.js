@@ -2,6 +2,7 @@ const AuthService = require('../../../services/auth');
 
 const login = async ctx => {
     const authService = new AuthService();
+
     const user = {
         email: ctx.request.body.email,
         password: ctx.request.body.password
@@ -11,7 +12,7 @@ const login = async ctx => {
         ctx.response.body = await authService.login(user);
     } catch (error) {
         ctx.response.status = 500;
-        ctx.response.body = error;
+        ctx.response.body = error.message;
     };
 };
 
@@ -23,7 +24,7 @@ const register = async ctx => {
         ctx.response.body = await authService.register(user);
     } catch (error) {
         ctx.response.status = 500;
-        ctx.response.body = error;
+        ctx.response.body = error.message;
     };
 };
 
@@ -42,7 +43,7 @@ const sendForgotPasswordKey = async ctx => {
         ctx.response.body = await authService.sendForgotPasswordKey(email);
     } catch (error) {
         ctx.response.status = 500;
-        ctx.response.body = error;
+        ctx.response.body = error.message;
     };
 };
 
@@ -54,7 +55,7 @@ const checkForgotPasswordKey = async ctx => {
         ctx.response.body = await authService.checkForgotPasswordKey(email, key);
     } catch (error) {
         ctx.response.status = 500;
-        ctx.response.body = error;
+        ctx.response.body = error.message;
     };
 };
 
@@ -66,7 +67,7 @@ const changePassword = async ctx => {
         ctx.response.body = await authService.changePassword(email, key, password);
     } catch (error) {
         ctx.response.status = 500;
-        ctx.response.body = error;
+        ctx.response.body = error.message;
     };
 };
 
