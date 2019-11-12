@@ -8,6 +8,12 @@ const errorHandler = require('./middleware/errorHandler');
 const router = require('./routes');
 const { port } = require('./utils/config');
 
+/**
+ * Loading env variables
+ */
+require('./services/env')(`${__dirname}/../`);
+
+
 const app = new Koa();
 
 app.use(helmet());
