@@ -1,10 +1,11 @@
 const BaseModel = require('./baseModel');
+const generateRandomString = require('../utils/generateRandomString');
 
 class UsersForgotPasswordsService extends BaseModel {
     async createForgotPasswordKey(id) {
         const body = {
             userId: id,
-            key: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
+            key: generateRandomString()
         };
         return this.model.usersForgotPasswords.create(body);
     }
