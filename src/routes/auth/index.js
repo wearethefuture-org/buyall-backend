@@ -11,6 +11,7 @@ router.post('/auth/login', authHandlers.login);
 router.post('/auth/register', authHandlers.register);
 
 // send forgot password key on mail 
+// delete middleware
 router.post('/auth/sendForgot', authHandlers.sendForgotPasswordKey);
 
 // check forgot password key 

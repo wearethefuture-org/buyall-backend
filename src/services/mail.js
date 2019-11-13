@@ -15,7 +15,7 @@ class MailService extends BaseModel {
 
     async sendMail(mail) {
         this.client.sendMail(mail, (err) => {
-            if (err ){
+            if (err){
                 return false;
             }
             return true;

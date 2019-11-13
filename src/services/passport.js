@@ -1,6 +1,6 @@
-const passport = require("koa-passport");
-const JwtStrategy = require("passport-jwt").Strategy;
-const ExtractJwt = require("passport-jwt").ExtractJwt;
+const passport = require('koa-passport');
+const JwtStrategy = require('passport-jwt').Strategy;
+const ExtractJwt = require('passport-jwt').ExtractJwt;
 const UserService = require('../services/user');
 
 const opts = {
