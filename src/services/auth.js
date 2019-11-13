@@ -25,7 +25,7 @@ class AuthService extends BaseModel {
         if (compared) {
             // make something with dataValues
             delete dbUser.dataValues.password;
-            const token = await tokenService.generateToken(dbUser.dataValues, 60 * 60 * 60);
+            const token = await tokenService.generateToken({user: dbUser.dataValues}, +process.env.TOKEN_TIME);
 
             return {
                 user: dbUser,
