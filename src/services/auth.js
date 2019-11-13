@@ -37,6 +37,7 @@ class AuthService extends BaseModel {
 
     async register(user) {
         const renderHTMLService = new RenderHTMLService();
+        const tokenService = new TokenService();
         const userService = new UserService();
         const userKeysService = new UsersKeysService();
         const mailService = new MailService();
@@ -65,7 +66,12 @@ class AuthService extends BaseModel {
         mailService.sendMail(mail).then().catch();
 
         delete createdUser.dataValues.password;
-        return createdUser;
+        const token = await tokenService.generateToken({user: createdUser.dataValues}, +process.env.TOKEN_TIME);
+
+        return {
+            user: createdUser,
+            token
+        };
     }
 
     async confirmRegistration(key) {
@@ -152,6 +158,7 @@ class AuthService extends BaseModel {
 
         if (key === trueKey.key) {
             const hash = await bcrypt.hash(password, +process.env.saltRounds);
+            usersForgotPasswordsService.deleteForgotPasswordKey(trueKey.id);
             userService.updateUser(user.id, { password: hash });
 
             return true;
