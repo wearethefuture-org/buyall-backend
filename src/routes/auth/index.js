@@ -11,13 +11,13 @@ router.post('/auth/login', authHandlers.login);
 router.post('/auth/register', authHandlers.register);
 
 // send forgot password key on mail 
-router.post('/auth/sendForgot', authMiddleware, authHandlers.sendForgotPasswordKey);
+router.post('/auth/sendForgot', authHandlers.sendForgotPasswordKey);
 
 // check forgot password key 
-router.post('/auth/checkKey', authMiddleware, authHandlers.checkForgotPasswordKey);
+router.post('/auth/checkKey', authHandlers.checkForgotPasswordKey);
 
 // change password 
-router.post('/auth/changePassword', authMiddleware, authHandlers.changePassword);
+router.post('/auth/changePassword', authHandlers.changePassword);
 
 // confirm registration
 router.post('/auth/confirm', authMiddleware, authHandlers.confirmRegistration);

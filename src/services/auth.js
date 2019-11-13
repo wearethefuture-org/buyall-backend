@@ -23,7 +23,6 @@ class AuthService extends BaseModel {
         const compared = await bcrypt.compare(user.password, dbUser.password);
 
         if (compared) {
-            // make something with dataValues
             delete dbUser.dataValues.password;
             const token = await tokenService.generateToken({user: dbUser.dataValues}, +process.env.TOKEN_TIME);
 
