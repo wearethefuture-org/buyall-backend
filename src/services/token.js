@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const BaseModel = require('./baseModel');
 
 
 class TokenService extends BaseModel {

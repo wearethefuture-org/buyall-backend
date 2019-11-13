@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt');
 
 const BaseModel = require('./baseModel');
 const MailService = require('./mail');
+const TokenService = require('./token');
 const UserService = require('./user');
 const UsersKeysService = require('./usersKeys');
 const UsersForgotPasswordsService = require('./usersForgotPasswords');
@@ -11,6 +12,7 @@ const generateRandomString = require('../utils/generateRandomString');
 class AuthService extends BaseModel {
     async login(user) {
         const userService = new UserService();
+        const tokenService = new TokenService();
 
         const dbUser = await userService.getUserByEmail(user.email);
 
@@ -21,8 +23,14 @@ class AuthService extends BaseModel {
         const compared = await bcrypt.compare(user.password, dbUser.password);
 
         if (compared) {
+            // make something with dataValues
             delete dbUser.dataValues.password;
-            return dbUser;
+            const token = await tokenService.generateToken(dbUser.dataValues, 60 * 60 * 60);
+
+            return {
+                user: dbUser,
+                token
+            };
         };
 
         throw new Error('Bad password');
