@@ -2,10 +2,8 @@ const Pug = require('koa-pug')
 const path = require('path')
 const BaseModel = require('./baseModel');
 
-class RenderHTMLService extends BaseModel {
+class RenderHTMLService {
     constructor() {
-        super();
-
         this.pug = new Pug({
             viewPath: path.resolve(__dirname, '../views')
         })

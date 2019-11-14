@@ -1,19 +1,24 @@
 const passport = require('../services/passport');
+const ExceptionUrls = Object.values(require('../enums/PassportExceptions'));
 
 const authMiddleware = async (ctx, next) => {
     await passport.authenticate('jwt', { session: false }, async (err, user) => {
-        if (err) {
-            ctx.response.status = 500;
-            ctx.response.body = err;
+        if (ExceptionUrls.includes(ctx.request.url)) {
+            await next();
         } else {
-            if (!user) {
-                ctx.response.status = 401;
-                ctx.response.body = 'Unauthorized!';
+            if (err) {
+                ctx.response.status = 500;
+                ctx.response.body = err;
             } else {
-                ctx.user = user;
-                await next();
+                if (!user) {
+                    ctx.response.status = 401;
+                    ctx.response.body = 'Unauthorized!';
+                } else {
+                    ctx.user = user;
+                    await next();
+                };
             };
-        };
+        }
     })(ctx, next);
 };
 
