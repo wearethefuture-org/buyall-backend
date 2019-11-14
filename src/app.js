@@ -4,7 +4,9 @@ const bodyParser = require('koa-bodyparser');
 const helmet = require('koa-helmet');
 
 const database = require('./services/database');
+const passport = require('./services/passport');
 const errorHandler = require('./middleware/errorHandler');
+const authMiddleware = require('./middleware/authHandler');
 const router = require('./routes');
 const { port } = require('./utils/config');
 
@@ -21,7 +23,9 @@ app.use(bodyParser());
 app.use(cors());
 
 app.use(errorHandler);
+app.use(authMiddleware);
 
+app.use(passport.initialize());
 app.use(router);
 
 database

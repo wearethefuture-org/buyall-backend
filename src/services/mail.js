@@ -2,10 +2,8 @@ const nodemailer = require('nodemailer');
 const sgTransport = require('nodemailer-sendgrid-transport');
 const BaseModel = require('./baseModel');
 
-class MailService extends BaseModel {
+class MailService {
     constructor() {
-        super();
-
         this.client = nodemailer.createTransport(sgTransport({
             auth: {
                 api_key: process.env.SENDGRID_API
@@ -15,7 +13,7 @@ class MailService extends BaseModel {
 
     async sendMail(mail) {
         this.client.sendMail(mail, (err) => {
-            if (err ){
+            if (err){
                 return false;
             }
             return true;
