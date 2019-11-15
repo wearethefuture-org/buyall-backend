@@ -1,6 +1,7 @@
 const Router = require('@koa/router');
 const usersHandlers = require('./handlers/usersHandlers');
-const UserUrls = require('../../enums/UserUrls');
+const { UserUrls } = require('../../enums/Urls');
+
 
 const router = new Router();
 
