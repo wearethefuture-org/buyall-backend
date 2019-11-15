@@ -1,4 +1,5 @@
 const passport = require('../services/passport');
+const HttpError = require('../utils/httpError');
 let { AuthExceptions } = require('../enums/Urls');
 AuthExceptions = Object.values(AuthExceptions);
 
@@ -10,15 +11,11 @@ const authMiddleware = async (ctx, next) => {
         } 
 
         if (err) {
-            ctx.response.status = 500;
-            ctx.response.body = err;
-            return;
+            throw err;
         } 
 
         if (!user) {
-            ctx.response.status = 401;
-            ctx.response.body = 'Unauthorized!';
-            return;
+            throw new HttpError(401, 'Unauthorized!' ,'Access denied');
         } 
 
         ctx.user = user;
