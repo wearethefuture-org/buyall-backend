@@ -1,0 +1,9 @@
+{
+  "ignore": ["node_modules"],
+  "env": {
+    "PORT": 3004,
+    "URL": "http://localhost"
+  },
+  "ext": ".js,.json",
+  "watch": "./"
+}
