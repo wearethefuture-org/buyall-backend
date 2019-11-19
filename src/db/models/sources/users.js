@@ -36,6 +36,12 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: 'pending',
         field: 'status'
       },
+      role: {
+        type: DataTypes.ENUM('user', 'admin', 'superadmin'),
+        allowNull: false,
+        defaultValue: 'user',
+        field: 'role'
+      },
       disabled: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
