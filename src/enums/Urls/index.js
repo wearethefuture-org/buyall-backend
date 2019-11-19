@@ -4,13 +4,16 @@ const CategoryUrls = require('./CategoryUrls');
 const SubCategoryUrls = require('./SubCategoryUrls');
 
 
-const AuthExceptions = Object.assign({}, AuthUrls, CategoryUrls);
-delete AuthExceptions.confirm;
+const PassportAuth = Object.assign({}, AuthUrls);
+delete PassportAuth.confirm;
 
-const UserRoleExceptions = {
-    auth: AuthUrls,
-    category: CategoryUrls,
-    subCategory: SubCategoryUrls
+const PassportUrls = {
+    PassportAuth,
+    UserUrls
+};
+
+const UserRoleUrls = {
+    UserUrls
 };
 
 module.exports = {
@@ -18,6 +21,6 @@ module.exports = {
     UserUrls,
     CategoryUrls,
     SubCategoryUrls,
-    UserRoleExceptions,
-    AuthExceptions
+    UserRoleUrls,
+    PassportUrls
 };

@@ -1,13 +1,20 @@
 const HttpError = require('../utils/httpError');
-let { UserRoleExceptions } = require('../enums/Urls');
-UserRoleExceptions = Object.values(UserRoleExceptions);
+let { UserRoleUrls} = require('../enums/Urls');
+UserRoleUrls = Object.values(UserRoleUrls);
 
 const roleMiddleware = async (ctx, next) => {
-    for (let i = 0;i < UserRoleExceptions.length;i++) {
-        if (Object.values(UserRoleExceptions[i]).includes(ctx.request.url)) {
-            await next();
-            return;
+    let guardRoute = false;
+
+    // check if route is guarded
+    for (let i = 0;i < UserRoleUrls.length;i++) {
+        if (Object.values(UserRoleUrls[i]).includes(ctx.request.url)) {
+            guardRoute = true;
         }
+    }
+
+    if (!guardRoute) {
+        await next();
+        return;
     }
 
     if (ctx.user.role === 'admin' || ctx.user.role === 'superadmin') {
