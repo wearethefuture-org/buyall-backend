@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 
+const HttpError = require('../utils/httpError');
 const BaseModel = require('./baseModel');
 const MailService = require('./mail');
 const TokenService = require('./token');
@@ -17,7 +18,7 @@ class AuthService extends BaseModel {
         const dbUser = await userService.getUserByEmail(user.email);
 
         if (!dbUser) {
-            throw new Error('User is unregistered');
+            throw new HttpError(401, 'User is unregistered', 'Access denied');
         };
 
         const compared = await bcrypt.compare(user.password, dbUser.password);
@@ -32,7 +33,7 @@ class AuthService extends BaseModel {
             };
         };
 
-        throw new Error('Bad password');
+        throw new HttpError(401, 'Bad password', 'Access denied');
     }
 
     async register(user) {
@@ -45,7 +46,7 @@ class AuthService extends BaseModel {
         user.password = await bcrypt.hash(user.password, +process.env.saltRounds);
 
         if (await userService.getUserByEmail(user.email)) {
-            throw new Error('User has already registered');
+            throw new HttpError(401, 'User has already registered', 'Can\'t register');
         };
 
         const createdUser = await userService.createUser(user);
@@ -124,7 +125,8 @@ class AuthService extends BaseModel {
 
             return true;
         };
-        throw new Error('Email is unregistered');
+
+        throw new HttpError(409, 'Email is unregistered', 'Can\'t send key');
     }
 
     async checkForgotPasswordKey(email, key) {
@@ -134,7 +136,7 @@ class AuthService extends BaseModel {
         const user = await userService.getUserByEmail(email);
 
         if (!user) {
-            throw new Error('Email is unregistered');
+            throw new HttpError(409, 'Email is unregistered', 'Can\'t check key');
         };
 
         const trueKey = await usersForgotPasswordsService.getForgotPasswordKey(user.id);
@@ -151,7 +153,7 @@ class AuthService extends BaseModel {
         const user = await userService.getUserByEmail(email);
 
         if (!user) {
-            throw new Error('Email is unregistered');
+            throw new HttpError(409, 'Email is unregistered', 'Can\'t change password');
         };
 
         const trueKey = await usersForgotPasswordsService.getForgotPasswordKey(user.id);
