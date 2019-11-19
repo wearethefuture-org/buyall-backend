@@ -22,7 +22,7 @@ const roleMiddleware = async (ctx, next) => {
         return;
     } 
 
-    throw new HttpError(401, 'Only admin and super admins have access to this page!', 'Access denied')
+    throw new HttpError(403, 'Only admin and super admins have access to this page!', 'Access denied')
 };
 
 module.exports = roleMiddleware;

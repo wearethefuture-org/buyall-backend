@@ -4,8 +4,8 @@ const CategoryUrls = require('./CategoryUrls');
 const SubCategoryUrls = require('./SubCategoryUrls');
 
 
-const PassportAuth = Object.assign({}, AuthUrls);
-delete PassportAuth.confirm;
+const PassportAuth = {};
+PassportAuth.confirm = AuthUrls.confirm;
 
 const PassportUrls = {
     PassportAuth,
