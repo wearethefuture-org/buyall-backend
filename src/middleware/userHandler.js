@@ -10,12 +10,12 @@ const roleMiddleware = async (ctx, next) => {
         }
     }
 
-    if (ctx.user.role === 'admin' || ctx.user.role === 'moderator') {
+    if (ctx.user.role === 'admin' || ctx.user.role === 'superadmin') {
         await next();
         return;
     } 
 
-    throw new HttpError(401, 'Only moderators and admins have access to this page!', 'Access denied')
+    throw new HttpError(401, 'Only admin and super admins have access to this page!', 'Access denied')
 };
 
 module.exports = roleMiddleware;
