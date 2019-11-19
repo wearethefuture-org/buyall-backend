@@ -1,6 +1,7 @@
 const Router = require('@koa/router');
 const subCategoriesHandlers = require('./handlers/subCategoriesHandlers.js');
-const SubCategoryUrls = require('../../enums/SubCategoryUrls');
+const { SubCategoryUrls } = require('../../enums/Urls');
+
 
 const router = new Router();
 
