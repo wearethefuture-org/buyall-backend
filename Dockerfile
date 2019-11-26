@@ -1,6 +1,3 @@
-FROM node:12
-RUN cd dev/
-
 RUN ls -l
 
 RUN apt-get -y update && apt-get -y install bash git curl python yarn nano
