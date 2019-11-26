@@ -8,4 +8,8 @@ RUN npm i -g pm2
 
 RUN yarn install
 
+RUN ls -l
+
+RUN pwd
+
 RUN npm run db:migrate:dev && pm2 kill && pm2 start --env dev
