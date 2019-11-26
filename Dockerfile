@@ -12,6 +12,8 @@ RUN npm i -g pm2
 
 RUN ls -l
 
+COPY . .
+
 RUN yarn install
 
 RUN pwd
