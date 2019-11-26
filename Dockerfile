@@ -10,6 +10,8 @@ RUN apt-get -y update && apt-get -y install bash git curl python yarn nano
 
 RUN npm i -g pm2
 
+RUN ls -l
+
 RUN yarn install
 
 RUN pwd
