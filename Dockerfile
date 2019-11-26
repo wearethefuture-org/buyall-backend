@@ -2,7 +2,8 @@ FROM node:10
 
 COPY . /app/
 RUN ls -l
-
+RUN cd app/
+RUN ls -l
 COPY package*.json ./
 
 RUN apt-get -y update && apt-get -y install bash git curl python yarn nano
