@@ -1,6 +1,6 @@
 FROM node:12
 
-WORKDIR /opt/backend
+WORKDIR /
 
 RUN apt-get -y update && apt-get -y install bash git curl python yarn nano
 
