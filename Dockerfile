@@ -1,4 +1,4 @@
-FROM node:10
+FROM gcr.io/river-nectar-258421/github.com/wearethefuture-org/buyall-backend:db1b008
 
 WORKDIR /usr/src/app
 
