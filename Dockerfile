@@ -16,4 +16,4 @@ RUN pwd
 # RUN npm run db:migrate:dev && pm2 kill && pm2 start --env dev
 COPY . .
 # CMD [ "npm", "start" ]
-RUN npm run db:migrate:dev && pm2 kill && pm2 start --env dev
+RUN pm2 kill && pm2 start --env dev
