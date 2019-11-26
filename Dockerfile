@@ -2,7 +2,7 @@ FROM node:10
 
 COPY . /app/
 RUN ls -l
-RUN cd app/
+RUN cd /app/
 RUN ls -l
 COPY package*.json ./
 
