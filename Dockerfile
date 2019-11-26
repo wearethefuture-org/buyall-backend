@@ -1,4 +1,5 @@
 FROM node:12
+RUN cd dev/
 
 RUN ls -l
 
