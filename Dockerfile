@@ -1,7 +1,6 @@
-FROM gcr.io/river-nectar-258421/github.com/wearethefuture-org/buyall-backend:db1b008
+FROM node:10
 
-WORKDIR /usr/src/app
-
+COPY . /app/
 RUN ls -l
 
 COPY package*.json ./
@@ -12,7 +11,7 @@ RUN npm i -g pm2
 
 RUN ls -l
 
-COPY . .
+
 
 RUN yarn install
 
