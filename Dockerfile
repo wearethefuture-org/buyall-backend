@@ -1,4 +1,10 @@
+FROM node:10
+
+WORKDIR /usr/src/app
+
 RUN ls -l
+
+COPY package*.json ./
 
 RUN apt-get -y update && apt-get -y install bash git curl python yarn nano
 
