@@ -4,11 +4,15 @@ module.exports = {
   },
   subCategories: {
     categories: 'categories',
+    characteristics: 'characteristics',
     products: 'products'
   },
   products: {
     subCategories: 'subCategories',
     characteristicsValues: 'characteristicsValues'
+  },
+  characteristics: {
+    subCategories: 'subCategories'
   },
   characteristicsValues: {
     products: 'products'

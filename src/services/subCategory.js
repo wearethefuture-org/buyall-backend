@@ -6,19 +6,31 @@ class SubCategoryService extends BaseModel {
       where: {
         id
       },
-      include: [{
-        model: this.model.products,
-        as: this.aliases.subCategories.products
-      }]
+      include: [
+        {
+          model: this.model.products,
+          as: this.aliases.subCategories.products
+        },
+        {
+          model: this.model.characteristics,
+          as: this.aliases.subCategories.characteristics
+        }
+      ]
     });
   }
 
   async getSubCategories() {
     return this.model.subCategories.findAll({
-      include: [{
-        model: this.model.products,
-        as: this.aliases.subCategories.products
-      }]
+      include: [
+        {
+          model: this.model.products,
+          as: this.aliases.subCategories.products
+        },
+        {
+          model: this.model.characteristics,
+          as: this.aliases.subCategories.characteristics
+        }
+      ]
     });
   }
 
