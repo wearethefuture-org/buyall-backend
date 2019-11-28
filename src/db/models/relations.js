@@ -27,6 +27,20 @@ module.exports = db => {
     onDelete: 'CASCADE'
   });
 
+  db.products.hasMany(db.characteristicsValues, {
+    as: db.aliases.products.characteristicsValues,
+    field: 'product_id',
+    targetKey: 'id',
+    foreignKey: 'productId',
+  });
+  db.characteristicsValues.belongsTo(db.products, {
+    as: db.aliases.characteristicsValues.products,
+    field: 'product_id',
+    targetKey: 'id',
+    foreignKey: 'productId',
+    onDelete: 'CASCADE'
+  });
+
   db.users.hasMany(db.usersKeys, {
     as: db.aliases.users.usersKeys,
     field: 'user_id',

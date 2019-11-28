@@ -7,7 +7,11 @@ module.exports = {
     products: 'products'
   },
   products: {
-    subCategories: 'subCategories'
+    subCategories: 'subCategories',
+    characteristicsValues: 'characteristicsValues'
+  },
+  characteristicsValues: {
+    products: 'products'
   },
   users: {
     usersKeys: 'usersKeys',
