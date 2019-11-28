@@ -5,12 +5,21 @@ class SubCategoryService extends BaseModel {
     return this.model.subCategories.findOne({
       where: {
         id
-      }
+      },
+      include: [{
+        model: this.model.products,
+        as: this.aliases.subCategories.products
+      }]
     });
   }
 
   async getSubCategories() {
-    return this.model.subCategories.findAll({});
+    return this.model.subCategories.findAll({
+      include: [{
+        model: this.model.products,
+        as: this.aliases.subCategories.products
+      }]
+    });
   }
 
   async createSubCategory(subCategory) {

@@ -1,8 +1,12 @@
 module.exports = {
-  subCategories: {
-    categories: 'categories'
-  },
   categories: {
+    subCategories: 'subCategories'
+  },
+  subCategories: {
+    categories: 'categories',
+    products: 'products'
+  },
+  products: {
     subCategories: 'subCategories'
   },
   users: {
