@@ -41,6 +41,15 @@ module.exports = db => {
     onDelete: 'CASCADE'
   });
 
+  db.subCategories.belongsToMany(db.characteristics, {
+    as: db.aliases.subCategories.characteristics,
+    through: 'subCategoryCharacteristics'
+  });
+  db.characteristics.belongsToMany(db.subCategories, {
+    as: db.aliases.characteristics.subCategories,
+    through: 'subCategoryCharacteristics'
+  });
+
   db.users.hasMany(db.usersKeys, {
     as: db.aliases.users.usersKeys,
     field: 'user_id',
