@@ -38,7 +38,7 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: true,
                 field: 'boolean_value'
             },
-            intValue: {
+            integerValue: {
                 type: DataTypes.INTEGER,
                 allowNull: true,
                 field: 'integer_value'

@@ -45,6 +45,29 @@ class ProductService extends BaseModel {
       ]
     });
   }
+
+  async createProduct(product) {
+    const createdProduct = await this.model.products.create(product);
+    return this.getProduct(createdProduct.id);
+  }
+
+  async updateProduct(id, product) {
+      await this.model.products.update(product, {
+          where: {
+              id
+          }
+      });
+
+      return this.getProduct(id);
+  }
+
+  async deleteProduct(id) {
+      return this.model.products.destroy({
+          where: {
+              id
+          }
+      });
+  }
 }
 
 module.exports = ProductService;
