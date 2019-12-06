@@ -4,18 +4,20 @@ module.exports = {
   },
   subCategories: {
     categories: 'categories',
-    characteristics: 'characteristics',
+    characteristicsSettings: 'characteristicsSettings',
     products: 'products'
   },
   products: {
     subCategories: 'subCategories',
     characteristicsValues: 'characteristicsValues'
   },
-  characteristics: {
-    subCategories: 'subCategories'
+  characteristicsSettings: {
+    subCategories: 'subCategories',
+    characteristicsValues: 'characteristicsValues'
   },
   characteristicsValues: {
-    products: 'products'
+    products: 'products',
+    characteristicsSettings: 'characteristicsSettings'
   },
   users: {
     usersKeys: 'usersKeys',

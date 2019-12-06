@@ -1,6 +1,6 @@
 module.exports = {
   up: (queryInterface, DataTypes) =>
-    queryInterface.createTable('characteristics', {
+    queryInterface.createTable('characteristics_settings', {
       id: {
         type: DataTypes.BIGINT,
         allowNull: false,
@@ -22,6 +22,11 @@ module.exports = {
         type: DataTypes.STRING,
         allowNull: true,
         field: 'description'
+      },
+      options: {
+        type: DataTypes.JSON,
+        allowNull: true,
+        field: 'options'
       },
       minOption: {
         type: DataTypes.STRING,
@@ -46,5 +51,5 @@ module.exports = {
         field: 'updated_at'
       }
     }),
-  down: queryInterface => queryInterface.dropTable('characteristics', {})
+  down: queryInterface => queryInterface.dropTable('characteristics_settings', {})
 };

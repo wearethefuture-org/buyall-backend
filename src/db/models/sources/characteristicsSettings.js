@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
-    const characteristicsValues = sequelize.define(
-        'characteristicsValues',
+    const characteristicsSettings = sequelize.define(
+        'characteristicsSettings',
         {
             id: {
                 type: DataTypes.BIGINT,
@@ -8,15 +8,6 @@ module.exports = (sequelize, DataTypes) => {
                 primaryKey: true,
                 autoIncrement: true,
                 field: 'id'
-            },
-            productId: {
-                type: DataTypes.BIGINT,
-                allowNull: false,
-                references: {
-                model: 'products',
-                key: 'id'
-                },
-                field: 'product_id'
             },
             name: {
                 type: DataTypes.STRING,
@@ -28,30 +19,25 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: false,
                 field: 'type'
             },
-            stringValue: {
+            description: {
                 type: DataTypes.STRING,
                 allowNull: true,
-                field: 'string_value'
+                field: 'description'
             },
-            booleanValue: {
-                type: DataTypes.BOOLEAN,
+            options: {
+                type: DataTypes.JSON,
                 allowNull: true,
-                field: 'boolean_value'
+                field: 'options'
             },
-            integerValue: {
-                type: DataTypes.INTEGER,
+            minOption: {
+                type: DataTypes.STRING,
                 allowNull: true,
-                field: 'integer_value'
+                field: 'minOption'
             },
-            floatValue: {
-                type: DataTypes.DATE,
+            maxOption: {
+                type: DataTypes.STRING,
                 allowNull: true,
-                field: 'float_value'
-            },
-            dateValue: {
-                type: DataTypes.FLOAT,
-                allowNull: true,
-                field: 'date_value'
+                field: 'maxOption'
             },
             createdAt: {
                 type: DataTypes.DATE,
@@ -66,11 +52,11 @@ module.exports = (sequelize, DataTypes) => {
             }
         },
         {
-            tableName: 'characteristics_values',
+            tableName: 'characteristics_settings',
             timestamps: false,
             createdAt: 'created_at',
             updatedAt: true
         }
     );
-    return characteristicsValues;
+    return characteristicsSettings;
 };

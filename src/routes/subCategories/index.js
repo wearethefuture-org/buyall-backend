@@ -1,23 +1,25 @@
 const Router = require('@koa/router');
 const subCategoriesHandlers = require('./handlers/subCategoriesHandlers.js');
-const { SubCategoryUrls } = require('../../enums/Urls');
 
 
 const router = new Router();
 
 // get all sub categories 
-router.get(SubCategoryUrls.allList, subCategoriesHandlers.getSubCategories);
+router.get('/subCategories', subCategoriesHandlers.getSubCategories);
+
+// get sub category products
+router.get('/subCategoryProducts/:id', subCategoriesHandlers.getSubCategoryProducts);
 
 // get sub category by id 
-router.get(SubCategoryUrls.getById, subCategoriesHandlers.getSubCategory);
+router.get('/subCategory/:id', subCategoriesHandlers.getSubCategory);
 
 // add new sub category
-router.post(SubCategoryUrls.create, subCategoriesHandlers.createtSubCategory);
+router.post('/subCategory', subCategoriesHandlers.createSubCategory);
 
 // update sub category
-router.put(SubCategoryUrls.update, subCategoriesHandlers.updateSubCategory);
+router.put('/subCategory/:id', subCategoriesHandlers.updateSubCategory);
 
 // delete sub category by id
-router.delete(SubCategoryUrls.delete, subCategoriesHandlers.deleteSubCategory);
+router.delete('/subCategory/:id', subCategoriesHandlers.deleteSubCategory);
 
 module.exports = router;

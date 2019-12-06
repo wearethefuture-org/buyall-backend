@@ -1,9 +1,20 @@
 const SubCategoryService = require('../../../services/subCategory');
+const ProductService = require('../../../services/product');
 
 const getSubCategories = async ctx => {
     const subCategoryService = new SubCategoryService();
 
     ctx.response.body = await subCategoryService.getSubCategories();
+};
+
+const getSubCategoryProducts = async ctx => {
+    const productService = new ProductService();
+    const { id } = ctx.params;
+
+    const offset = ctx.request.query.offset;
+    const limit = ctx.request.query.limit;
+
+    ctx.response.body = await productService.getProductsBySubCategoryId(id, offset, limit);
 };
 
 const getSubCategory = async ctx => {
@@ -13,7 +24,7 @@ const getSubCategory = async ctx => {
     ctx.response.body = await subCategoryService.getSubCategory(id);
 };
 
-const createtSubCategory = async ctx => {
+const createSubCategory = async ctx => {
     const subCategoryService = new SubCategoryService();
     const newSubCategory = ctx.request.body;
 
@@ -37,8 +48,9 @@ const deleteSubCategory = async ctx => {
 
 module.exports = {
     deleteSubCategory,
-    createtSubCategory,
+    createSubCategory,
     updateSubCategory,
     getSubCategory,
-    getSubCategories
+    getSubCategories,
+    getSubCategoryProducts
 }

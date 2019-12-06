@@ -17,14 +17,14 @@ module.exports = {
         },
         field: 'sub_category_id'
       },
-      characteristicId: {
+      characteristicsSettingsId: {
         type: DataTypes.BIGINT,
         allowNull: false,
         references: {
-          model: 'characteristics',
+          model: 'characteristics_settings',
           key: 'id'
         },
-        field: 'characteristic_id'
+        field: 'characteristics_settings_id'
       },
       createdAt: {
         type: DataTypes.DATE,

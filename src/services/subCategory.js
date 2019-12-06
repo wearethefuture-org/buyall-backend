@@ -8,12 +8,8 @@ class SubCategoryService extends BaseModel {
       },
       include: [
         {
-          model: this.model.products,
-          as: this.aliases.subCategories.products
-        },
-        {
-          model: this.model.characteristics,
-          as: this.aliases.subCategories.characteristics
+          model: this.model.characteristicsSettings,
+          as: this.aliases.subCategories.characteristicsSettings
         }
       ]
     });
@@ -23,12 +19,8 @@ class SubCategoryService extends BaseModel {
     return this.model.subCategories.findAll({
       include: [
         {
-          model: this.model.products,
-          as: this.aliases.subCategories.products
-        },
-        {
-          model: this.model.characteristics,
-          as: this.aliases.subCategories.characteristics
+          model: this.model.characteristicsSettings,
+          as: this.aliases.subCategories.characteristicsSettings
         }
       ]
     });
