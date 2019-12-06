@@ -1,23 +1,22 @@
 const Router = require('@koa/router');
 const usersHandlers = require('./handlers/usersHandlers');
-const { UserUrls } = require('../../enums/Urls');
 
 
 const router = new Router();
 
 // Get all users
-router.get(UserUrls.allList, usersHandlers.users);
+router.get('/users', usersHandlers.users);
 
 // Get one user
-router.get(UserUrls.getById, usersHandlers.user);
+router.get('/user/:id', usersHandlers.user);
 
 // Add new user
-router.post(UserUrls.create, usersHandlers.createUser);
+router.post('/user', usersHandlers.createUser);
 
 // Update user
-router.put(UserUrls.update, usersHandlers.updateUser);
+router.put('/user/:id', usersHandlers.updateUser);
 
 // Delete user
-router.delete(UserUrls.delete, usersHandlers.deleteUser);
+router.delete('/user/:id', usersHandlers.deleteUser);
 
 module.exports = router;

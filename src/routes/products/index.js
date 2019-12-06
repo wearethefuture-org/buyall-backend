@@ -1,23 +1,22 @@
 const Router = require('@koa/router');
 const productsHandlers = require('./handlers/productsHandlers');
-const { ProductsUrls } = require('../../enums/Urls');
 
 
 const router = new Router();
 
 // get all products
-router.get(ProductsUrls.allList, productsHandlers.getProducts);
+router.get('/products', productsHandlers.getProducts);
 
 // get product by id
-router.get(ProductsUrls.getById, productsHandlers.getProduct);
+router.get('/product/:id', productsHandlers.getProduct);
 
 // create new product
-router.post(ProductsUrls.create, productsHandlers.createProduct);
+router.post('/product', productsHandlers.createProduct);
 
 // update product
-router.put(ProductsUrls.update, productsHandlers.updateProduct);
+router.put('/product/:id', productsHandlers.updateProduct);
 
 // delete product by id
-router.delete(ProductsUrls.delete, productsHandlers.deleteProduct);
+router.delete('/product/:id', productsHandlers.deleteProduct);
 
 module.exports = router;

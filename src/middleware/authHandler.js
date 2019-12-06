@@ -5,15 +5,16 @@ PassportUrls = Object.values(PassportUrls);
 
 const authMiddleware = async (ctx, next) => {
     await passport.authenticate('jwt', { session: false }, async (err, user) => {
+        PassportUrls = {} // no routes now refactor this
         let guardRoute = false;
 
         // check if route is guarded
         for (let i = 0;i < PassportUrls.length;i++) {
-            if (Object.values(PassportUrls[i]).includes(ctx.request.url)) {
+            if (PassportUrls[i].includes(ctx.request.url)) {
                 guardRoute = true;
             }
         }
-
+        
         if (!guardRoute) {
             await next();
             return;

@@ -17,6 +17,15 @@ module.exports = {
         },
         field: 'product_id'
       },
+      characteristicSettingId: {
+        type: DataTypes.BIGINT,
+        allowNull: false,
+        references: {
+          model: 'characteristics_settings',
+          key: 'id'
+        },
+        field: 'characteristic_setting_id'
+      },
       name: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -37,7 +46,7 @@ module.exports = {
         allowNull: true,
         field: 'boolean_value'
       },
-      intValue: {
+      integerValue: {
         type: DataTypes.INTEGER,
         allowNull: true,
         field: 'integer_value'
@@ -51,6 +60,11 @@ module.exports = {
         type: DataTypes.FLOAT,
         allowNull: true,
         field: 'date_value'
+      },
+      enumValue: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        field: 'enum_value'
       },
       createdAt: {
         type: DataTypes.DATE,

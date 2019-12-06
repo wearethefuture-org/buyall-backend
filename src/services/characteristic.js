@@ -1,6 +1,10 @@
 const BaseModel = require('./baseModel');
 
 class CharacteristicService extends BaseModel {
+    async getCharacteristicsSettings() {
+        return this.model.characteristicsSettings.findAll({});
+    }
+
     async createCharacteristicValue(characteristicValue) {
         return this.model.characteristicsValues.create(characteristicValue);
     }

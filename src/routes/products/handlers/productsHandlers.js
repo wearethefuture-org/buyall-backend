@@ -1,110 +1,40 @@
 const ProductService = require('../../../services/product');
 const CharacteristicService = require('../../../services/characteristic');
+const Promise = require('bluebird');
 
 const getProducts = async ctx => {
     const productService = new ProductService();
-    const products = await productService.getProducts();;
 
-    products.map(product => {
-        const characteristics = product.subCategories.characteristics;
-        const values = product.characteristicsValues;
+    const offset = ctx.request.query.offset;
+    const limit = ctx.request.query.limit;
 
-        delete product.dataValues.subCategories;
-        delete product.dataValues.characteristicsValues;
-
-        characteristics.map(characteristic => {
-            characteristic = characteristic.dataValues;
-            values.map(value => {
-                value = value.dataValues;
-
-                if (value.name != characteristic.name) {
-                    return;
-                }
-
-                if (!value.hasOwnProperty(characteristic.type + 'Value')) {
-                    return;
-                }
-
-                product.dataValues[characteristic.name] = value[characteristic.type + 'Value'];
-            });
-        });
-    });
-
-    ctx.response.body = products;
+    ctx.response.body = await productService.getProducts(offset, limit);
 };
 
 const getProduct = async ctx => {
     const productService = new ProductService();
     const { id } = ctx.params;
-
-    const product = await productService.getProduct(id);
-    const characteristics = product.subCategories.characteristics;
-    const values = product.characteristicsValues;
-
-    delete product.dataValues.subCategories;
-    delete product.dataValues.characteristicsValues;
-
-    characteristics.map(characteristic => {
-        characteristic = characteristic.dataValues;
-        values.map(value => {
-            value = value.dataValues;
-
-            if (value.name != characteristic.name) {
-                return;
-            }
-
-            if (!value.hasOwnProperty(characteristic.type + 'Value')) {
-                return;
-            }
-
-            product.dataValues[characteristic.name] = value[characteristic.type + 'Value'];
-        });
-    });
-    ctx.response.body = product;
+    ctx.response.body = await productService.getProduct(id);
 };
 
 const createProduct = async ctx => {
     const productService = new ProductService();
     const characteristicService = new CharacteristicService(); 
 
-    const newProduct = ctx.request.body;
-    const product = await productService.createProduct(newProduct);
-    const characteristics = product.subCategories.characteristics;
+    const product = await productService.createProduct(ctx.request.body.product);
+    const values = ctx.request.body.characteristicsValues;
 
-    delete product.dataValues.subCategories;
-    delete product.dataValues.characteristicsValues;
-    
-    Object.keys(newProduct).map(field => {
-        characteristics.map(characteristic => {
-            characteristic = characteristic.dataValues;
-            
-            if (characteristic.name != field) {
-                return;
-            }
-
-            if (typeof field != characteristic.type) {
-                return;
-            }
-
-            const newValue = {
-                productId: product.dataValues.id,
-                name: field,
-                type: characteristic.type
-            };
-            newValue[characteristic.type + 'Value'] = newProduct[field];
-
-            characteristicService.createCharacteristicValue(newValue);
-
-            product.dataValues[field] = newProduct[field];
-        });
+    await Promise.mapSeries(values, async value => {
+        value.productId = product.dataValues.id;
+        value = await characteristicService.createCharacteristicValue(value);
+        product.dataValues.characteristicsValues.push(value);
     });
-    
+
     ctx.response.body = product;
 };
 
 const updateProduct = async ctx => {
     const productService = new ProductService();
-    const characteristicService = new CharacteristicService(); 
 
     const { id } = ctx.params;
     const product = ctx.request.body;
@@ -115,23 +45,23 @@ const updateProduct = async ctx => {
     delete updatedProduct.dataValues.subCategories;
     delete updatedProduct.dataValues.characteristicsValues;
 
-    Object.keys(product).map(field => {
-        values.map(value => {
-            value = value.dataValues;
-
-            if (value.name != field) {
+    Object.keys(product).forEach(field => {
+        Promise.mapSeries(values, function(value) {
+            if (value.dataValues.name != field) {
                 return;
             };
 
-            if (typeof field != value.type) {
+            if (typeof field != value.dataValues.type) {
                 return;
             }
 
             const updateValue = {};
-            updateValue[value.type + 'Value'] = product[field];
-
-            characteristicService.updateCharacteristicValue(value.id, updateValue);
+            updateValue[value.dataValues.type + 'Value'] = product[field];
+            
+            value.update(updateValue);
             updatedProduct.dataValues[field] = product[field];
+
+            return value;
         });
     });
 
@@ -140,14 +70,14 @@ const updateProduct = async ctx => {
 
 const deleteProduct = async ctx => {
     const productService = new ProductService();
-    const characteristicService = new CharacteristicService(); 
     const {id} = ctx.params;
 
     const product = await productService.getProduct(id);
     const values = product.characteristicsValues;
 
-    values.map(value => {
-        characteristicService.deleteCharacteristicValue(value.dataValues.id);
+    // check maybe cascade delete is better
+    Promise.mapSeries(values, function(value) {
+        value.destroy();
     });
 
     ctx.response.body = await productService.deleteProduct(id);
