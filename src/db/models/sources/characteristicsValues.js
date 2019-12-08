@@ -53,12 +53,12 @@ module.exports = (sequelize, DataTypes) => {
                 field: 'integer_value'
             },
             floatValue: {
-                type: DataTypes.DATE,
+                type: DataTypes.FLOAT,
                 allowNull: true,
                 field: 'float_value'
             },
             dateValue: {
-                type: DataTypes.FLOAT,
+                type: DataTypes.DATE,
                 allowNull: true,
                 field: 'date_value'
             },
