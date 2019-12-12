@@ -1,19 +1,29 @@
-const Categories = require('../seeders_data/categories');
+const faker = require('faker');
+const model = require('../models');
 
 module.exports = {
-  up: (queryInterface) => {
-    const categories = Object.values(Categories);
+  up: async () => {
+    const amount = 10;
 
-    return queryInterface.bulkInsert('categories', categories, {});
+    for (let i = 0;i < amount;i++) {
+      const category = {
+        name: faker.lorem.words(2),
+        description: faker.lorem.sentence(10),
+        img: faker.image.image()
+      };
+
+      try {
+        await model.categories.create(category);
+      } catch (error) {
+        console.log(error.message);
+      }
+    }
   },
 
-  down: (queryInterface) => {
-    const categories = Object.values(Categories);
-
-    return queryInterface.bulkDelete('categories', [{
-      name: categories.map(category => {
-        return category.name;
-      })
-    }]);
+  down: async () => {
+    return await model.categories.truncate({
+      restartIdentity: true,
+      cascade: true
+    });
   }
 };

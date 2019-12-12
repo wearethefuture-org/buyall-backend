@@ -25,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
                 field: 'description'
             },
             options: {
-                type: DataTypes.JSON,
+                type: DataTypes.ARRAY(DataTypes.STRING),
                 allowNull: true,
                 field: 'options'
             },

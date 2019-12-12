@@ -19,6 +19,7 @@
     "bcryptjs": "^2.4.3",
     "bluebird": "^3.7.2",
     "dotenv": "^8.2.0",
+    "faker": "^4.1.0",
     "koa": "^2.10.0",
     "koa-bodyparser": "^4.2.1",
     "koa-combine-routers": "^4.0.2",
