@@ -4,7 +4,10 @@ const ProductService = require('../../../services/product');
 const getSubCategories = async ctx => {
     const subCategoryService = new SubCategoryService();
 
-    ctx.response.body = await subCategoryService.getSubCategories();
+    const offset = ctx.request.query.offset;
+    const limit = ctx.request.query.limit;
+
+    ctx.response.body = await subCategoryService.getSubCategories(offset, limit);
 };
 
 const getSubCategoryProducts = async ctx => {

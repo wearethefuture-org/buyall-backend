@@ -1,22 +1,28 @@
 const BaseModel = require('./baseModel');
 
 class SubCategoryService extends BaseModel {
-  async getSubCategory(id) {
-    return this.model.subCategories.findOne({
-      where: {
-        id
-      },
+  async getSubCategories(offset = undefined, limit = undefined) {
+    const params = {
       include: [
         {
           model: this.model.characteristicsSettings,
           as: this.aliases.subCategories.characteristicsSettings
         }
       ]
-    });
+    };
+
+    if (offset) { params.offset = offset; }
+
+    if (limit) { params.limit = limit; }
+
+    return this.model.subCategories.findAndCountAll(params);
   }
 
-  async getSubCategories() {
-    return this.model.subCategories.findAll({
+  async getSubCategory(id) {
+    return this.model.subCategories.findOne({
+      where: {
+        id
+      },
       include: [
         {
           model: this.model.characteristicsSettings,
