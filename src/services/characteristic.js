@@ -2,7 +2,7 @@ const BaseModel = require('./baseModel');
 
 class CharacteristicService extends BaseModel {
     async getCharacteristicsSettings() {
-        return this.model.characteristicsSettings.findAll({});
+        return await this.model.characteristicsSettings.findAll({});
     }
 
     async createCharacteristicSetting(characteristicSetting, subCategoryId) {
@@ -16,12 +16,20 @@ class CharacteristicService extends BaseModel {
         return setting;
     }
 
+    async updateCharacteristicSetting(id, characteristicSetting) {
+        return await this.model.characteristicsSettings.update(characteristicSetting, {
+            where: {
+                id
+            }
+        });
+    }
+
     async createCharacteristicValue(characteristicValue) {
-        return this.model.characteristicsValues.create(characteristicValue);
+        return await this.model.characteristicsValues.create(characteristicValue);
     }
 
     async updateCharacteristicValue(id, characteristicValue) {
-        return this.model.characteristicsValues.update(characteristicValue, {
+        return await this.model.characteristicsValues.update(characteristicValue, {
             where: {
                 id
             }
@@ -29,7 +37,7 @@ class CharacteristicService extends BaseModel {
     }
 
     async deleteCharacteristicValue(id) {
-        return this.model.characteristicsValues.destroy({
+        return await this.model.characteristicsValues.destroy({
             where: {
                 id
             }
