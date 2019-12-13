@@ -1,4 +1,5 @@
 const BaseModel = require('./baseModel');
+const Promise = require('bluebird');
 
 class SubCategoryService extends BaseModel {
   async getSubCategories(offset = undefined, limit = undefined) {
@@ -45,6 +46,24 @@ class SubCategoryService extends BaseModel {
   }
 
   async deleteSubCategory(id) {
+    const products = await this.model.products.findAll({
+      where: {
+        subCategoryId: id
+      },
+      include: [{
+        model: this.model.characteristicsValues,
+        as: this.aliases.products.characteristicsValues
+      }]
+    });
+
+    await Promise.each(products, async product => {
+      await Promise.each(product.characteristicsValues, async value => {
+        await value.destroy();
+      });
+
+      await product.destroy();
+    });
+
     return this.model.subCategories.destroy({
       where: {
         id

@@ -53,9 +53,26 @@ const updateSubCategory = async ctx => {
 
 const deleteSubCategory = async ctx => {
     const subCategoryService = new SubCategoryService();
-    const {id} = ctx.params;
+    const { id } = ctx.params;
 
-    ctx.response.body = await subCategoryService.deleteSubCategory(id);
+    const subCategory = await subCategoryService.getSubCategory(id);
+
+    await Promise.each(subCategory.characteristicsSettings, async setting => {
+        await setting.subCategoryCharacteristics.destroy();
+    });
+
+    const res = await subCategoryService.deleteSubCategory(id);
+
+    await Promise.each(subCategory.characteristicsSettings, async setting => {
+        await setting.subCategoryCharacteristics.destroy();
+
+        try {
+            await setting.destroy();
+        } catch (error) {
+        }
+    });
+
+    ctx.response.body = res;
 };
 
 module.exports = {
