@@ -1,4 +1,6 @@
+const Promise = require('bluebird');
 const SubCategoryService = require('../../../services/subCategory');
+const CharacteristicService = require('../../../services/characteristic');
 const ProductService = require('../../../services/product');
 
 const getSubCategories = async ctx => {
@@ -29,9 +31,16 @@ const getSubCategory = async ctx => {
 
 const createSubCategory = async ctx => {
     const subCategoryService = new SubCategoryService();
+    const characteristicService = new CharacteristicService(); 
     const newSubCategory = ctx.request.body;
 
-    ctx.response.body = await subCategoryService.createSubCategory(newSubCategory);
+    const dbSubCategory = await subCategoryService.createSubCategory(newSubCategory);
+
+    await Promise.each(newSubCategory.characteristicsSettings, async setting => {
+        await characteristicService.createCharacteristicSetting(setting, dbSubCategory.dataValues.id);
+    });
+
+    ctx.response.body = await subCategoryService.getSubCategory(dbSubCategory.dataValues.id);
 };
 
 const updateSubCategory = async ctx => {
