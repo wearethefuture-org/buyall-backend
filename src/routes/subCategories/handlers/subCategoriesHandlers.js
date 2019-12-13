@@ -45,10 +45,16 @@ const createSubCategory = async ctx => {
 
 const updateSubCategory = async ctx => {
     const subCategoryService = new SubCategoryService();
-    const { id } = ctx.params;
-    const updatedSubCategory = ctx.request.body;
+    const characteristicService = new CharacteristicService(); 
 
-    ctx.response.body = await subCategoryService.updateSubCategory(id, updatedSubCategory);
+    const { id } = ctx.params;
+    const mustBeUpdatedSubCategory = ctx.request.body;
+
+    await Promise.each(mustBeUpdatedSubCategory.characteristicsSettings, async setting => {
+        await characteristicService.updateCharacteristicSetting(setting.id, setting);
+    });
+
+    ctx.response.body = (await subCategoryService.updateSubCategory(id, mustBeUpdatedSubCategory))[0];
 };
 
 const deleteSubCategory = async ctx => {
@@ -64,8 +70,6 @@ const deleteSubCategory = async ctx => {
     const res = await subCategoryService.deleteSubCategory(id);
 
     await Promise.each(subCategory.characteristicsSettings, async setting => {
-        await setting.subCategoryCharacteristics.destroy();
-
         try {
             await setting.destroy();
         } catch (error) {
