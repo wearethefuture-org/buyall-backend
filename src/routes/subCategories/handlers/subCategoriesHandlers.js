@@ -5,11 +5,9 @@ const ProductService = require('../../../services/product');
 
 const getSubCategories = async ctx => {
     const subCategoryService = new SubCategoryService();
+    const params = ctx.request.query;
 
-    const offset = ctx.request.query.offset;
-    const limit = ctx.request.query.limit;
-
-    ctx.response.body = await subCategoryService.getSubCategories(offset, limit);
+    ctx.response.body = await subCategoryService.getSubCategories(params);
 };
 
 const getSubCategoryProducts = async ctx => {
@@ -44,17 +42,19 @@ const createSubCategory = async ctx => {
 };
 
 const updateSubCategory = async ctx => {
-    const subCategoryService = new SubCategoryService();
-    const characteristicService = new CharacteristicService(); 
+        const subCategoryService = new SubCategoryService();
+        const characteristicService = new CharacteristicService();
 
-    const { id } = ctx.params;
-    const mustBeUpdatedSubCategory = ctx.request.body;
+        const { id } = ctx.params;
+        const mustBeUpdatedSubCategory = ctx.request.body;
 
-    await Promise.each(mustBeUpdatedSubCategory.characteristicsSettings, async setting => {
-        await characteristicService.updateCharacteristicSetting(setting.id, setting);
-    });
+        await Promise.each(mustBeUpdatedSubCategory.characteristicsSettings, async setting => {
+            await characteristicService.updateCharacteristicSetting(setting.id, setting);
+        });
 
-    ctx.response.body = (await subCategoryService.updateSubCategory(id, mustBeUpdatedSubCategory))[0];
+        const result = await subCategoryService.updateSubCategory(id, mustBeUpdatedSubCategory);
+
+        ctx.response.body = result[0];
 };
 
 const deleteSubCategory = async ctx => {

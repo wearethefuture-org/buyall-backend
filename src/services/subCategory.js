@@ -1,22 +1,20 @@
-const BaseModel = require('./baseModel');
 const Promise = require('bluebird');
+const BaseModel = require('./baseModel');
 
 class SubCategoryService extends BaseModel {
-  async getSubCategories(offset = undefined, limit = undefined) {
-    const params = {
+  async getSubCategories(params) {
+    const { limit = 30, offset = 0 } = params;
+
+    return this.model.subCategories.findAndCountAll({
+      limit,
+      offset,
       include: [
         {
           model: this.model.characteristicsSettings,
           as: this.aliases.subCategories.characteristicsSettings
         }
       ]
-    };
-
-    if (offset) { params.offset = offset; }
-
-    if (limit) { params.limit = limit; }
-
-    return this.model.subCategories.findAndCountAll(params);
+    });
   }
 
   async getSubCategory(id) {
@@ -46,6 +44,7 @@ class SubCategoryService extends BaseModel {
   }
 
   async deleteSubCategory(id) {
+    // TODO need refactor
     const products = await this.model.products.findAll({
       where: {
         subCategoryId: id

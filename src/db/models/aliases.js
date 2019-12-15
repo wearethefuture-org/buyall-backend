@@ -28,5 +28,8 @@ module.exports = {
   },
   usersForgotPasswords: {
     users: 'users'
+  },
+  subCategoryCharacteristics: {
+
   }
 };
