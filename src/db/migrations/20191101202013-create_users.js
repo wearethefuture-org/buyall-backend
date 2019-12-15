@@ -47,6 +47,11 @@ module.exports = {
         defaultValue: false,
         field: 'disabled'
       },
+      img: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        field: 'img'
+      },
       dateBirthday: {
         type: DataTypes.DATE,
         allowNull: false,

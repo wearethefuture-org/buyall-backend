@@ -1,6 +1,6 @@
 module.exports = {
   up: (queryInterface, DataTypes) =>
-    queryInterface.createTable('sub_categories', {
+    queryInterface.createTable('products', {
       id: {
         type: DataTypes.BIGINT,
         allowNull: false,
@@ -8,14 +8,14 @@ module.exports = {
         autoIncrement: true,
         field: 'id'
       },
-      categoryId: {
+      subCategoryId: {
         type: DataTypes.BIGINT,
         allowNull: false,
         references: {
-          model: 'categories',
+          model: 'sub_categories',
           key: 'id'
         },
-        field: 'category_id'
+        field: 'sub_category_id'
       },
       name: {
         type: DataTypes.STRING,
@@ -32,6 +32,36 @@ module.exports = {
         allowNull: true,
         field: 'img'
       },
+      available: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        field: 'available'
+      },
+      amount: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        field: 'amount'
+      },
+      isPromotion: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        field: 'is_promotion'
+      },
+      discount: {
+        type: DataTypes.FLOAT,
+        allowNull: true,
+        field: 'discount'
+      },
+      weight: {
+        type: DataTypes.FLOAT,
+        allowNull: false,
+        field: 'weight'
+      },
+      price: {
+        type: DataTypes.FLOAT,
+        allowNull: false,
+        field: 'price'
+      },
       createdAt: {
         type: DataTypes.DATE,
         allowNull: false,
@@ -45,5 +75,5 @@ module.exports = {
         field: 'updated_at'
       }
     }),
-  down: queryInterface => queryInterface.dropTable('sub_categories', {})
+  down: queryInterface => queryInterface.dropTable('products', {})
 };
