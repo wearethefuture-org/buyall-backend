@@ -21,16 +21,14 @@ const createProduct = async ctx => {
     const productService = new ProductService();
     const characteristicService = new CharacteristicService(); 
 
-    const product = await productService.createProduct(ctx.request.body.product);
-    const values = ctx.request.body.characteristicsValues;
+    const product = await productService.createProduct(ctx.request.body);
 
-    await Promise.mapSeries(values, async value => {
-        value.productId = product.dataValues.id;
-        value = await characteristicService.createCharacteristicValue(value);
-        product.dataValues.characteristicsValues.push(value);
+    await Promise.mapSeries(ctx.request.body.characteristicsValues, async value => {
+        value.productId = product.id;
+        await characteristicService.createCharacteristicValue(value);
     });
-
-    ctx.response.body = product;
+    
+    ctx.response.body = await productService.getProduct(product.id);
 };
 
 const updateProduct = async ctx => {
