@@ -13,7 +13,9 @@ const {
 } = require('../../utils/config');
 
 const basename = path.basename(__filename);
-const db = {};
+const db = {
+  aliases
+};
 
 const sequelize = new Sequelize(databaseName, username, password, {
   host,
@@ -45,7 +47,6 @@ Object.keys(db).forEach(modelName => {
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
-db.aliases = aliases;
 
 relations(db);
 
