@@ -58,13 +58,11 @@ class ProductService extends BaseModel {
   }
 
   async updateProduct(id, product) {
-      await this.model.products.update(product, {
-          where: {
-              id
-          }
-      });
-
-      return this.getProduct(id);
+    return await this.model.products.update(product, {
+        where: {
+          id
+        }
+    });
   }
 
   async deleteProduct(id) {

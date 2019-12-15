@@ -33,37 +33,14 @@ const createProduct = async ctx => {
 
 const updateProduct = async ctx => {
     const productService = new ProductService();
-
+    const characteristicService = new CharacteristicService(); 
     const { id } = ctx.params;
-    const product = ctx.request.body;
 
-    const updatedProduct = await productService.updateProduct(id, product);
-    const values = updatedProduct.characteristicsValues;
-
-    delete updatedProduct.dataValues.subCategories;
-    delete updatedProduct.dataValues.characteristicsValues;
-
-    Object.keys(product).forEach(field => {
-        Promise.mapSeries(values, function(value) {
-            if (value.dataValues.name != field) {
-                return;
-            };
-
-            if (typeof field != value.dataValues.type) {
-                return;
-            }
-
-            const updateValue = {};
-            updateValue[value.dataValues.type + 'Value'] = product[field];
-            
-            value.update(updateValue);
-            updatedProduct.dataValues[field] = product[field];
-
-            return value;
-        });
+    await Promise.each(ctx.request.body.characteristicsValues, async value => {
+        await characteristicService.updateCharacteristicValue(value.id, value);
     });
 
-    ctx.response.body = updatedProduct;
+    ctx.response.body = (await productService.updateProduct(id, ctx.request.body))[0];
 };
 
 const deleteProduct = async ctx => {
@@ -85,4 +62,4 @@ module.exports = {
     createProduct,
     updateProduct,
     deleteProduct
-}
+};
