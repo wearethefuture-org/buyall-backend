@@ -68,14 +68,12 @@ const updateProduct = async ctx => {
 
 const deleteProduct = async ctx => {
     const productService = new ProductService();
-    const {id} = ctx.params;
+    const { id } = ctx.params;
 
     const product = await productService.getProduct(id);
-    const values = product.characteristicsValues;
 
-    // check maybe cascade delete is better
-    Promise.mapSeries(values, function(value) {
-        value.destroy();
+    await Promise.each(product.characteristicsValues, async value => {
+        await value.destroy();
     });
 
     ctx.response.body = await productService.deleteProduct(id);
