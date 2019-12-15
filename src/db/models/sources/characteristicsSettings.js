@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
-    const categories = sequelize.define(
-        'categories',
+    const characteristicsSettings = sequelize.define(
+        'characteristicsSettings',
         {
             id: {
                 type: DataTypes.BIGINT,
@@ -14,15 +14,30 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: false,
                 field: 'name'
             },
+            type: {
+                type: DataTypes.STRING,
+                allowNull: false,
+                field: 'type'
+            },
             description: {
                 type: DataTypes.STRING,
                 allowNull: true,
                 field: 'description'
             },
-            img: {
+            options: {
+                type: DataTypes.ARRAY(DataTypes.STRING),
+                allowNull: true,
+                field: 'options'
+            },
+            minOption: {
                 type: DataTypes.STRING,
                 allowNull: true,
-                field: 'img'
+                field: 'minOption'
+            },
+            maxOption: {
+                type: DataTypes.STRING,
+                allowNull: true,
+                field: 'maxOption'
             },
             createdAt: {
                 type: DataTypes.DATE,
@@ -37,11 +52,11 @@ module.exports = (sequelize, DataTypes) => {
             }
         },
         {
-            tableName: 'categories',
+            tableName: 'characteristics_settings',
             timestamps: false,
             createdAt: 'created_at',
             updatedAt: true
         }
     );
-    return categories;
+    return characteristicsSettings;
 };

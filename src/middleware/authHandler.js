@@ -1,20 +1,19 @@
 const passport = require('../services/passport');
 const HttpError = require('../utils/httpError');
-let { PassportUrls } = require('../enums/Urls');
-PassportUrls = Object.values(PassportUrls);
+const { PassportUrls } = require('../enums/Urls');
 
 const authMiddleware = async (ctx, next) => {
     await passport.authenticate('jwt', { session: false }, async (err, user) => {
-        let guardRoute = false;
+        let notGuardRoute = false;
 
-        // check if route is guarded
-        for (let i = 0;i < PassportUrls.length;i++) {
-            if (Object.values(PassportUrls[i]).includes(ctx.request.url)) {
-                guardRoute = true;
+        // TODO refactor this code
+        for (let i = 0; i < PassportUrls.length; i++) {
+            if (!PassportUrls[i].includes(ctx.request.url)) {
+                notGuardRoute = true;
             }
         }
-
-        if (!guardRoute) {
+        
+        if (notGuardRoute) {
             await next();
             return;
         }

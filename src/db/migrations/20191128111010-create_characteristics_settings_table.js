@@ -1,6 +1,6 @@
 module.exports = {
   up: (queryInterface, DataTypes) =>
-    queryInterface.createTable('categories', {
+    queryInterface.createTable('characteristics_settings', {
       id: {
         type: DataTypes.BIGINT,
         allowNull: false,
@@ -13,15 +13,30 @@ module.exports = {
         allowNull: false,
         field: 'name'
       },
+      type: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        field: 'type'
+      },
       description: {
         type: DataTypes.STRING,
         allowNull: true,
         field: 'description'
       },
-      img: {
+      options: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        allowNull: true,
+        field: 'options'
+      },
+      minOption: {
         type: DataTypes.STRING,
         allowNull: true,
-        field: 'img'
+        field: 'minOption'
+      },
+      maxOption: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        field: 'maxOption'
       },
       createdAt: {
         type: DataTypes.DATE,
@@ -36,5 +51,5 @@ module.exports = {
         field: 'updated_at'
       }
     }),
-  down: queryInterface => queryInterface.dropTable('categories', {})
+  down: queryInterface => queryInterface.dropTable('characteristics_settings', {})
 };

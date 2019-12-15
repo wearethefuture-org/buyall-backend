@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
-    const subCategories = sequelize.define(
-        'subCategories',
+    const products = sequelize.define(
+        'products',
         {
             id: {
                 type: DataTypes.BIGINT,
@@ -9,14 +9,14 @@ module.exports = (sequelize, DataTypes) => {
                 autoIncrement: true,
                 field: 'id'
             },
-            categoryId: {
+            subCategoryId: {
                 type: DataTypes.BIGINT,
                 allowNull: false,
                 references: {
-                    model: 'categories',
-                    key: 'id'
+                model: 'sub_categories',
+                key: 'id'
                 },
-                field: 'category_id'
+                field: 'sub_category_id'
             },
             name: {
                 type: DataTypes.STRING,
@@ -33,6 +33,36 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: true,
                 field: 'img'
             },
+            available: {
+                type: DataTypes.BOOLEAN,
+                allowNull: false,
+                field: 'available'
+            },
+            amount: {
+                type: DataTypes.INTEGER,
+                allowNull: true,
+                field: 'amount'
+            },
+            isPromotion: {
+                type: DataTypes.BOOLEAN,
+                allowNull: false,
+                field: 'is_promotion'
+            },
+            discount: {
+                type: DataTypes.FLOAT,
+                allowNull: true,
+                field: 'discount'
+            },
+            weight: {
+                type: DataTypes.FLOAT,
+                allowNull: false,
+                field: 'weight'
+            },
+            price: {
+                type: DataTypes.FLOAT,
+                allowNull: false,
+                field: 'price'
+            },
             createdAt: {
                 type: DataTypes.DATE,
                 allowNull: false,
@@ -46,11 +76,11 @@ module.exports = (sequelize, DataTypes) => {
             }
         },
         {
-            tableName: 'sub_categories',
+            tableName: 'products',
             timestamps: false,
             createdAt: 'created_at',
             updatedAt: true
         }
     );
-    return subCategories;
+    return products;
 };
