@@ -5,6 +5,14 @@ class CharacteristicService extends BaseModel {
         return await this.model.characteristicsSettings.findAll({});
     }
 
+    async getCharacteristicSetting(id) {
+        return await this.model.characteristicsSettings.findOne({
+            where: {
+                id
+            }
+        });
+    }
+
     async createCharacteristicSetting(characteristicSetting, subCategoryId) {
         const setting = await this.model.characteristicsSettings.create(characteristicSetting);
 
@@ -22,6 +30,10 @@ class CharacteristicService extends BaseModel {
                 id
             }
         });
+    }
+
+    async getCharacteristicValue(id) {
+        return await this.model.characteristicsValues.findOne(id);
     }
 
     async createCharacteristicValue(characteristicValue) {
