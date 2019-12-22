@@ -1,4 +1,4 @@
-FROM gcr.io/river-nectar-258421/github.com/wearethefuture-org/buyall-backend:db1b008
+FROM node:10
 
 RUN apt-get -y update && apt-get -y install bash git curl python yarn nano
 
@@ -13,11 +13,7 @@ RUN yarn install
 
 RUN pwd
 
-#ENV PORT 8080
-
-#EXPOSE 8080
-
 # RUN npm run db:migrate:dev && pm2 kill && pm2 start --env dev
-COPY . ./
-#CMD [ "npm", "dev" ]
+COPY . .
+# CMD [ "npm", "start" ]
 RUN pm2 kill && pm2 start --env dev
