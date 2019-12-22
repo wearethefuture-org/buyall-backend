@@ -13,6 +13,8 @@ RUN yarn install
 
 RUN pwd
 
+ENV PORT 8080
+
 # RUN npm run db:migrate:dev && pm2 kill && pm2 start --env dev
 COPY . .
 CMD [ "npm", "dev" ]
