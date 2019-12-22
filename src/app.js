@@ -34,7 +34,7 @@ database
   .authenticate()
   .then(() => {
     console.log('Connected to database');
-    app.listen(port, () => console.log(`Server started on port ${port}`));
+    app.listen(port, () => console.log(`Server started on port ${8080}`));
   })
   .catch(() => {
     console.error('Unable to connect to database');
