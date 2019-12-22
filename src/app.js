@@ -30,7 +30,7 @@ app.use(userRoleMiddleware);
 app.use(passport.initialize());
 app.use(router);
 
-app.listen(port, () => console.log(`Server started on port ${8080}`));
+app.listen(8080, () => console.log(`Server started on port ${8080}`));
 
 database
   .authenticate()
