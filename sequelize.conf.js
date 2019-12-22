@@ -1,3 +1,8 @@
+/**
+ * Loading env variables
+ */
+require('./src/services/env')(`${__dirname}/../`);
+
 const {
   username,
   password,
