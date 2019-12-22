@@ -30,11 +30,13 @@ app.use(userRoleMiddleware);
 app.use(passport.initialize());
 app.use(router);
 
+app.listen(port, () => console.log(`Server started on port ${8080}`));
+
 database
   .authenticate()
   .then(() => {
     console.log('Connected to database');
-    app.listen(port, () => console.log(`Server started on port ${8080}`));
+    // app.listen(port, () => console.log(`Server started on port ${8080}`));
   })
   .catch(() => {
     console.error('Unable to connect to database');
