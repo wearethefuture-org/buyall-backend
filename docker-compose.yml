@@ -1,0 +1,27 @@
+version: '3.7'
+
+services:
+
+  web:
+    build: .
+    environment:
+      - NODE_ENV=development
+      - PORT=3004
+      - POSTGRES_USERNAME=bplszpqk
+      - POSTGRES_PASSWORD=DiH3gQG7VnGQFYtJF8Kew6lnt_V4T14I
+      - DATABASE_NAME=bplszpqk
+      - POSTGRES_HOST=manny.db.elephantsql.com
+    ports:
+      - 3004:3004
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:10.5-alpine
+    environment:
+      - POSTGRES_USERNAME=bplszpqk
+      - POSTGRES_PASSWORD=DiH3gQG7VnGQFYtJF8Kew6lnt_V4T14I
+      - DATABASE_NAME=bplszpqk
+      - POSTGRES_HOST=manny.db.elephantsql.com
+    expose:
+      - 5432

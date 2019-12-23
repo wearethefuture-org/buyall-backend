@@ -1,12 +1,28 @@
 steps:
-  # build the container image
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'gcr.io/river-nectar-258421/[buyall-backend]', '.']
-  # push the container image to Container Registry
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'gcr.io/river-nectar-258421/[buyall-backend]']
-  # Deploy container image to Cloud Run
-- name: 'gcr.io/cloud-builders/gcloud'
-  args: ['beta', 'run', 'deploy', '[buyall-backend]', '--image', 'gcr.io/river-nectar-258421/[buyall-backend]', '--region', '[us-central1]','--platform', '[PLATFORM]', '--quiet']
-images:
-- gcr.io/river-nectar-258421/[buyall-backend]
+  - name: 'gcr.io/cloud-builders/git'
+    args: ['clone', 'https://github.com/${_GIT_USER}/${_REPO_NAME}']
+  
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build','-t', 'gcr.io/${_PROJECT}/${_CONTAINERNAME}:${_VERSION}','.']
+  
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/${_PROJECT}/${_CONTAINERNAME}:${_VERSION}']    
+
+  - name: 'gcr.io/cloud-builders/gke-deploy'
+    args:
+    - 'run'
+    - '--image=gcr.io/${_PROJECT}/${_DEPLOYNAME}:${_VERSION}'
+    - '--location=${_ZONE}'
+    - '--cluster=${_GKE_CLUSTER}'
+
+substitutions:
+  _PROJECT: tough-bearing-259612
+  _ZONE: europe-west1-b
+  _GKE_CLUSTER: standard-cluster-1
+
+  _CONTAINERNAME: bdeploy
+  _DEPLOYNAME: bdeploy-new	
+  _REPO_NAME: Bdeploy
+  _GIT_USER: Maxe1
+
+  _VERSION: v1.3

@@ -1,23 +1,10 @@
-FROM node:10
+FROM node:12
 
-RUN apt-get -y update && apt-get -y install bash git curl python yarn nano
+RUN mkdir -p /usr/src/app
+WORKDIR /user/src/app
 
-RUN npm i -g pm2
-
-RUN ls -l
-
-WORKDIR /usr/src/app
-COPY package*.json ./
-
-RUN yarn install
-
-RUN pwd
-
-#ENV PORT 8080
-
-#EXPOSE 8080
-
-# RUN npm run db:migrate:dev && pm2 kill && pm2 start --env dev
+COPY package.json ./
+RUN npm install
+RUN npm install -g sequelize-cli
 COPY . .
-# CMD [ "npm", "start" ]
-RUN pm2 kill && pm2 start --env dev
+CMD ["npm", "start"]
