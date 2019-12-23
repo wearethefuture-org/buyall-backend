@@ -18,6 +18,6 @@ RUN pwd
 #EXPOSE 8080
 
 # RUN npm run db:migrate:dev && pm2 kill && pm2 start --env dev
-COPY . .
+COPY . ./
 #CMD [ "npm", "dev" ]
 RUN pm2 kill && pm2 start --env dev
