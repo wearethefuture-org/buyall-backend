@@ -1,0 +1,12 @@
+steps:
+  # build the container image
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/river-nectar-258421/[buyall-backend]', '.']
+  # push the container image to Container Registry
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/river-nectar-258421/[buyall-backend]']
+  # Deploy container image to Cloud Run
+- name: 'gcr.io/cloud-builders/gcloud'
+  args: ['beta', 'run', 'deploy', '[buyall-backend]', '--image', 'gcr.io/river-nectar-258421/[buyall-backend]', '--region', '[us-central1]','--platform', '[PLATFORM]', '--quiet']
+images:
+- gcr.io/river-nectar-258421/[buyall-backend]
