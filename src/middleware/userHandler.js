@@ -1,23 +1,33 @@
+const { match } = require("path-to-regexp");
 const HttpError = require('../utils/httpError');
-let { UserRoleUrls} = require('../enums/Urls');
-UserRoleUrls = Object.values(UserRoleUrls);
+const { UserRoleUrls } = require('../enums/Urls');
 
 const roleMiddleware = async (ctx, next) => {
-    let guardRoute = false;
+    const { user } = ctx;
+    const { url, method } = ctx.request;
 
-    // check if route is guarded
-    for (let i = 0;i < UserRoleUrls.length;i++) {
-        if (Object.values(UserRoleUrls[i]).includes(ctx.request.url)) {
-            guardRoute = true;
+    let routeGuared = false;
+
+    UserRoleUrls.forEach(route => {
+        if (method !== route.method) {
+            return;
         }
-    }
 
-    if (!guardRoute) {
+        const regexp = match(route.url, {decode: decodeURIComponent});
+
+        if (!regexp(url)) {
+            return;
+        }
+
+        routeGuared = true;
+    });
+
+    if (!routeGuared) {
         await next();
         return;
     }
 
-    if (ctx.user.role === 'admin' || ctx.user.role === 'superadmin') {
+    if (user.role === 'admin' || user.role === 'superadmin') {
         await next();
         return;
     } 
