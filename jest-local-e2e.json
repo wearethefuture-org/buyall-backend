@@ -1,0 +1,7 @@
+{
+  "rootDir": "./test",
+  "testRegex": ".e2e-spec.js$",
+  "globals": {
+    "environment": "e2e"
+  }
+}

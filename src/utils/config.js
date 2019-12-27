@@ -11,6 +11,9 @@ let env = '';
     case 'production':
       env = 'prod';
       break;
+    case 'e2e': 
+      env = 'e2e';
+      break;
     default:
       break;
   }
