@@ -9,7 +9,13 @@
     "start:dev": "DEBUG='app*,critical*,info*,warning*,security,system*' NODE_ENV=local nodemon --inspect ./src/app.js",
     "db:migrate": "DEBUG='app*,critical*,info*,warning*,security*' sequelize db:migrate",
     "db:seed": "DEBUG='app*,critical*,info*,warning*,security*' sequelize db:seed",
-    "e2e": "scripts/e2e.sh"
+    "e2e": "scripts/e2e.sh",
+    "e2e:db:create": "DEBUG='app*,critical*,info*,warning*,security*' NODE_ENV=e2e sequelize db:create",
+    "e2e:db:drop": "DEBUG='app*,critical*,info*,warning*,security*' NODE_ENV=e2e sequelize db:drop",
+    "e2e:db:migrate": "DEBUG='app*,critical*,info*,warning*,security*' NODE_ENV=e2e sequelize db:migrate",
+    "e2e:db:migrate:undo": "DEBUG='app*,critical*,info*,warning*,security*' NODE_ENV=e2e sequelize db:migrate:undo:all",
+    "e2e:db:seed": "DEBUG='app*,critical*,info*,warning*,security*' NODE_ENV=e2e sequelize db:seed:all",
+    "e2e:db:seed:undo": "DEBUG='app*,critical*,info*,warning*,security*' NODE_ENV=e2e sequelize db:seed:undo:all"
   },
   "keywords": [],
   "author": "",
