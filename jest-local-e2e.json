@@ -1,5 +1,5 @@
 {
-  "rootDir": "./test",
+  "rootDir": "./tests/e2e",
   "testRegex": ".e2e-spec.js$",
   "globals": {
     "environment": "e2e"

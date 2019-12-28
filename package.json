@@ -9,7 +9,7 @@
     "start:dev": "DEBUG='app*,critical*,info*,warning*,security,system*' NODE_ENV=local nodemon --inspect ./src/app.js",
     "db:migrate": "DEBUG='app*,critical*,info*,warning*,security*' sequelize db:migrate",
     "db:seed": "DEBUG='app*,critical*,info*,warning*,security*' sequelize db:seed",
-    "e2e": "scripts/e2e.sh",
+    "e2e": "NODE_ENV=e2e scripts/e2e.sh",
     "e2e:db:create": "DEBUG='app*,critical*,info*,warning*,security*' NODE_ENV=e2e sequelize db:create",
     "e2e:db:drop": "DEBUG='app*,critical*,info*,warning*,security*' NODE_ENV=e2e sequelize db:drop",
     "e2e:db:migrate": "DEBUG='app*,critical*,info*,warning*,security*' NODE_ENV=e2e sequelize db:migrate",
@@ -40,9 +40,9 @@
     "passport-jwt": "^4.0.0",
     "path-to-regexp": "^6.1.0",
     "pg": "^7.12.1",
+    "pm2": "^4.2.1",
     "sequelize": "^5.21.1",
-    "sqlite3": "^4.1.0",
-    "pm2": "^4.2.1"
+    "sqlite3": "^4.1.0"
   },
   "devDependencies": {
     "eslint": "^5.16.0",

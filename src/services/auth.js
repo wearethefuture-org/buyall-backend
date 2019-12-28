@@ -46,8 +46,12 @@ class AuthService extends BaseModel {
         user.password = await bcrypt.hash(user.password, +process.env.saltRounds);
 
         if (await userService.getUserByEmail(user.email)) {
-            throw new HttpError(401, 'User has already registered', 'Can\'t register');
+            throw new HttpError(409, 'User has already registered', 'Can\'t register');
         };
+
+        user.status = 'pending';
+        user.role = 'user';
+        user.disabled = false;
 
         const createdUser = await userService.createUser(user);
 
@@ -82,7 +86,7 @@ class AuthService extends BaseModel {
         const userKey = await userKeysService.getUserKey(key);
 
         if (userKey) {
-            userService.updateUser(userKey.userId, {status: 'confirmed'});
+            await userService.updateUser(userKey.userId, {status: 'confirmed'});
             userKeysService.deleteUserKey(userKey.id);
 
             return true;
@@ -98,35 +102,35 @@ class AuthService extends BaseModel {
 
         const user = await userService.getUserByEmail(email);
 
-        if (user) {
-            let forgotPasswordKey = await usersForgotPasswordsService.getForgotPasswordKey(user.id);
+        if (!user) {
+            throw new HttpError(409, 'Email is unregistered', 'Can\'t send key');
+        }
 
-            if (forgotPasswordKey) {
-                const key = generateRandomString();
+        let forgotPasswordKey = await usersForgotPasswordsService.getForgotPasswordKey(user.id);
 
-                forgotPasswordKey.update({key});
-            } else {
-                forgotPasswordKey = await usersForgotPasswordsService.createForgotPasswordKey(user.id);
-            };
+        if (forgotPasswordKey) {
+            const key = generateRandomString();
 
-            const html = await renderHTMLService.render('passwordKey', {
-                name: user.firstName,
-                email: user.email,
-                key: forgotPasswordKey.key
-            });
-            const mail = {
-                from: 'buyall@gmail.com',
-                to: user.email,
-                subject: 'Forgot password',
-                text: 'forgot password key',
-                html
-            };
-            mailService.sendMail(mail).then().catch();
-
-            return true;
+            forgotPasswordKey.update({key});
+        } else {
+            forgotPasswordKey = await usersForgotPasswordsService.createForgotPasswordKey(user.id);
         };
 
-        throw new HttpError(409, 'Email is unregistered', 'Can\'t send key');
+        const html = await renderHTMLService.render('passwordKey', {
+            name: user.firstName,
+            email: user.email,
+            key: forgotPasswordKey.key
+        });
+        const mail = {
+            from: 'buyall@gmail.com',
+            to: user.email,
+            subject: 'Forgot password',
+            text: 'forgot password key',
+            html
+        };
+        mailService.sendMail(mail);
+
+        return true;
     }
 
     async checkForgotPasswordKey(email, key) {
@@ -158,14 +162,16 @@ class AuthService extends BaseModel {
 
         const trueKey = await usersForgotPasswordsService.getForgotPasswordKey(user.id);
 
-        if (key === trueKey.key) {
-            const hash = await bcrypt.hash(password, +process.env.saltRounds);
-            usersForgotPasswordsService.deleteForgotPasswordKey(trueKey.id);
-            userService.updateUser(user.id, { password: hash });
-
-            return true;
+        if (key !== trueKey.key) {
+            return false;
         };
-        return false;
+
+        usersForgotPasswordsService.deleteForgotPasswordKey(trueKey.id);
+
+        const hash = await bcrypt.hash(password, +process.env.saltRounds);
+        await userService.updateUser(user.id, { password: hash });
+
+        return true;
     }
 }
 

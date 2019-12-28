@@ -1,5 +1,9 @@
 const PassportUrls = [
     {
+        url: '/auth/confirm',
+        method: 'POST'
+    },
+    {
         url: '/users',
         method: 'GET'
     },
