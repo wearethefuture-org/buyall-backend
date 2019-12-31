@@ -1,6 +1,5 @@
 const PassportUrls = require('./passport');
-
-const UserRoleUrls = {};
+const UserRoleUrls = require('./userRoles');
 
 module.exports = {
     PassportUrls,
