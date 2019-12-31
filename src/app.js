@@ -30,13 +30,17 @@ app.use(userRoleMiddleware);
 app.use(passport.initialize());
 app.use(router);
 
-database
-  .authenticate()
-  .then(() => {
-    console.log('Connected to database');
-    app.listen(port, () => console.log(`Server started on port ${port}`));
-  })
-  .catch(() => {
-    console.error('Unable to connect to database');
-    process.exit(1);
-  });
+console.log('worked');
+
+app.listen(process.env.PORT || 8080, () => console.log(`Server started on port ${8080}`));
+
+// database
+//   .authenticate()
+//   .then(() => {
+//     console.log('Connected to database');
+//     // app.listen(port, () => console.log(`Server started on port ${8080}`));
+//   })
+//   .catch(() => {
+//     console.error('Unable to connect to database');
+//     process.exit(1);
+//   });
