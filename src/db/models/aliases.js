@@ -21,7 +21,8 @@ module.exports = {
   },
   users: {
     usersKeys: 'usersKeys',
-    usersForgotPasswords: 'usersForgotPasswords'
+    usersForgotPasswords: 'usersForgotPasswords',
+    files: 'img'
   },
   usersKeys: {
     users: 'users'

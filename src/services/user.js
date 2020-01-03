@@ -26,10 +26,18 @@ class UserService extends BaseModel {
   }
 
   async updateUser(id, user) {
-    return this.model.users.update(user, {
+    await this.model.users.update(user, {
       where: {
         id
       }
+    });
+
+    return this.model.users.findOne({
+      where: {id},
+      include: [{
+        model: this.model.files,
+        as: this.aliases.users.files
+      }]
     });
   }
 

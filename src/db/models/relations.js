@@ -93,4 +93,9 @@ module.exports = db => {
     foreignKey: 'userId',
     onDelete: 'CASCADE'
   });
+
+  db.users.belongsTo(db.files, {
+    as: db.aliases.users.files,
+    foreignKey: 'imgId'
+  });
 };

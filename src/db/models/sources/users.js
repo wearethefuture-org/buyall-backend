@@ -9,6 +9,15 @@ module.exports = (sequelize, DataTypes) => {
         autoIncrement: true,
         field: 'id'
       },
+      imgId: {
+        type: DataTypes.BIGINT,
+        allowNull: true,
+        references: {
+            model: 'files',
+            key: 'id'
+        },
+        field: 'image_id'
+      },
       firstName: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -47,11 +56,6 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         defaultValue: false,
         field: 'disabled'
-      },
-      img: {
-        type: DataTypes.STRING,
-        allowNull: true,
-        field: 'img'
       },
       dateBirthday: {
         type: DataTypes.DATE,

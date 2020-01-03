@@ -1,4 +1,5 @@
 const UserService = require('../../../services/user');
+const StorageService = require('../../../services/storage');
 
 const createUser = async ctx => {
   const userService = new UserService();
@@ -31,7 +32,13 @@ const updateUser = async ctx => {
 };
 
 const uploadImage = async ctx => {
-  ctx.response.body = ctx.file;
+  const storageService = new StorageService();
+  const userService = new UserService();
+  const { id } = ctx.params;
+
+  const file = await storageService.uploadFile(ctx.file, 'users-images');
+
+  ctx.response.body = await userService.updateUser(id, {imgId: file.id});
 };
 
 module.exports = {
