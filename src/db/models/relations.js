@@ -41,6 +41,25 @@ module.exports = db => {
     onDelete: 'CASCADE'
   });
 
+  db.products.hasOne(db.files, {
+    as: db.aliases.products.previewImage,
+    foreignKey: 'oneProductId'
+  });
+
+  db.products.hasMany(db.files, {
+    as: db.aliases.products.images,
+    field: 'many_product_id',
+    targetKey: 'id',
+    foreignKey: 'manyProductId',
+  });
+  db.files.belongsTo(db.products, {
+    as: db.aliases.products.products,
+    field: 'many_product_id',
+    targetKey: 'id',
+    foreignKey: 'manyProductId',
+    onDelete: 'CASCADE'
+  });
+
   db.subCategories.belongsToMany(db.characteristicsSettings, {
     as: db.aliases.subCategories.characteristicsSettings,
     through: 'subCategoryCharacteristics',

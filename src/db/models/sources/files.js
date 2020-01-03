@@ -19,6 +19,24 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: false,
                 field: 'url'
             },
+            oneProductId: {
+                type: DataTypes.BIGINT,
+                allowNull: true,
+                references: {
+                    model: 'products',
+                    key: 'id'
+                },
+                field: 'one_product_id'
+            },
+            manyProductId: {
+                type: DataTypes.BIGINT,
+                allowNull: true,
+                references: {
+                    model: 'products',
+                    key: 'id'
+                },
+                field: 'many_product_id'
+            },
             createdAt: {
                 type: DataTypes.DATE,
                 allowNull: false,

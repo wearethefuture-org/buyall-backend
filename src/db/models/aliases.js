@@ -9,7 +9,9 @@ module.exports = {
   },
   products: {
     subCategories: 'subCategories',
-    characteristicsValues: 'characteristicsValues'
+    characteristicsValues: 'characteristicsValues',
+    previewImage: 'previewImage',
+    images: 'images'
   },
   characteristicsSettings: {
     subCategories: 'subCategories',
@@ -30,7 +32,7 @@ module.exports = {
   usersForgotPasswords: {
     users: 'users'
   },
-  subCategoryCharacteristics: {
-
+  files: {
+    products: 'products'
   }
 };

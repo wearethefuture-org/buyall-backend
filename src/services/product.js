@@ -7,6 +7,14 @@ class ProductService extends BaseModel {
         {
           model: this.model.characteristicsValues,
           as: this.aliases.products.characteristicsValues
+        },
+        {
+          model: this.model.files,
+          as: this.aliases.products.previewImage
+        },
+        {
+          model: this.model.files,
+          as: this.aliases.products.images
         }
       ]
     };
@@ -27,6 +35,14 @@ class ProductService extends BaseModel {
         {
           model: this.model.characteristicsValues,
           as: this.aliases.products.characteristicsValues
+        },
+        {
+          model: this.model.files,
+          as: this.aliases.products.previewImage
+        },
+        {
+          model: this.model.files,
+          as: this.aliases.products.images
         }
       ]
     };
@@ -47,6 +63,14 @@ class ProductService extends BaseModel {
         {
           model: this.model.characteristicsValues,
           as: this.aliases.products.characteristicsValues
+        },
+        {
+          model: this.model.files,
+          as: this.aliases.products.previewImage
+        },
+        {
+          model: this.model.files,
+          as: this.aliases.products.images
         }
       ]
     });
