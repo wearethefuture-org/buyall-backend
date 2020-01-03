@@ -30,10 +30,15 @@ const updateUser = async ctx => {
   ctx.response.body = await userService.updateUser(id, newUser);
 };
 
+const uploadImage = async ctx => {
+  ctx.response.body = ctx.file;
+};
+
 module.exports = {
   createUser,
   deleteUser,
   user,
   users,
-  updateUser
+  updateUser,
+  uploadImage
 };
