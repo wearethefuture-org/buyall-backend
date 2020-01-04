@@ -18,19 +18,23 @@ class StorageService extends BaseModel {
     async uploadFile(file, destination) {
         const fileName = `${Date.now()}_${file.originalname}`;
 
-        this.bucket.file(`${destination}/${fileName}`).createWriteStream({
+        this.bucket.file(`${destination}${fileName}`).createWriteStream({
             metadata: {
                 contentType: file.mimetype
             },
             resumable: false
         }).end(file.buffer);
-        
-        const url = `${this.baseUrl}/${this.bucket.name}/${destination}/${fileName}`;
+
+        const url = `${this.baseUrl}/${this.bucket.name}/${destination}${fileName}`;
 
         return await this.model.files.create({
-            name: file.originalname,
+            name: fileName,
             url
         });
+    }
+
+    async deleteFile(path) {
+        return this.bucket.file(path).delete();
     }
 }
 
