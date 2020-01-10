@@ -6,7 +6,7 @@ const {
 } = require('./src/utils/config');
 
 module.exports = {
-  development: {
+  // development: {
     username,
     password,
     database: databaseName,
@@ -20,5 +20,5 @@ module.exports = {
     migrationStorageTableName: 'sequelize_meta',
     migrationStorageTableSchema: 'sequelize_schema',
     logging: true
-  }
+  // }
 };

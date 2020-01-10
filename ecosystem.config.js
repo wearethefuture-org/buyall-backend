@@ -15,7 +15,10 @@ module.exports = {
       },
       env_production: {
         NODE_ENV: 'production'
-      }
+      },
+      env_e2e: {
+        NODE_ENV: 'e2e'
+      },
     },
   ]
 };
