@@ -1,18 +1,22 @@
 const { Storage } = require('@google-cloud/storage');
 const path = require('path');
+
 const BaseModel = require('./baseModel');
+const config = require('../utils/config');
+
+const root = path.join.bind(this, __dirname, '../../');
 
 class StorageService extends BaseModel {
     constructor() {
         super();
 
         this.storage = new Storage({
-            keyFilename: path.join(__dirname, '../../storage.json'),
-            projectId: 'river-nectar-258421'
+            keyFilename: root(config.cloudConfigPath),
+            projectId: config.projectId
         });
         this.baseUrl = 'https://storage.cloud.google.com';
 
-        this.bucket = this.storage.bucket('files-storage-local');
+        this.bucket = this.storage.bucket(config.bucketName);
     }
 
     async uploadFile(file, destination) {

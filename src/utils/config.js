@@ -26,3 +26,8 @@ exports.databaseName = process.env.DATABASE_NAME;
 exports.username = process.env.POSTGRES_USERNAME;
 exports.password = process.env.POSTGRES_PASSWORD;
 exports.host = process.env.POSTGRES_HOST;
+
+// Google Cloud
+exports.cloudConfigPath = process.env.CLOUD_JSON_PATH;
+exports.projectId = process.env.PROJECT_ID;
+exports.bucketName = process.env.BUCKET_NAME;
