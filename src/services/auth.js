@@ -1,10 +1,13 @@
 const bcrypt = require('bcrypt');
+const Promise = require('bluebird');
 
 const config = require('../utils/config');
 const HttpError = require('../utils/httpError');
 const BaseModel = require('./baseModel');
 const MailService = require('./mail');
 const UserService = require('./user');
+const OrderService = require('./orders');
+
 const UsersKeysService = require('./usersKeys');
 const UsersForgotPasswordsService = require('./usersForgotPasswords');
 const RenderHTMLService = require('./renderHTML');
@@ -32,6 +35,7 @@ class AuthService extends BaseModel {
     }
 
     async register(body) {
+        const orderService = new OrderService();
         const renderHTMLService = new RenderHTMLService();
         const userService = new UserService();
         const userKeysService = new UsersKeysService();
@@ -49,6 +53,21 @@ class AuthService extends BaseModel {
 
         const user = await userService.createUser(body);
 
+        user.dataValues.orders = [];
+
+        await Promise.each(body.orders || [], async order => {
+            const body = {
+                amount: order.amount,
+                productId: order.product.id,
+                userId: user.id,
+                status: 'in cart'
+            };
+
+            const dbOrder = await orderService.createOrder(body);
+
+            user.dataValues.orders.push(dbOrder);
+        });
+
         const key = await userKeysService.createUserKey(user.id);
 
         const html = await renderHTMLService.render('confirmEmail', {
@@ -57,7 +76,7 @@ class AuthService extends BaseModel {
         });
         const mail = {
             from: 'buyall@gmail.com',
-            to: createdUser.email,
+            to: user.email,
             subject: 'Email confirmation',
             text: 'confirm your email',
             html
