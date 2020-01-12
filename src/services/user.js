@@ -2,35 +2,52 @@ const BaseModel = require('./baseModel');
 
 class UserService extends BaseModel {
   async getUsers() {
-    return this.model.users.findAll({});
+    // TODO: delete passwords
+    const users = this.model.users.findAll({});
   }
 
   async getUser(id) {
-    return this.model.users.findOne({
+    const user = this.model.users.findOne({
       where: {
         id
       }
     });
+
+    delete user.dataValues.password;
+
+    return user;
   }
 
   async getUserByEmail(email) {
-    return this.model.users.findOne({
+    const user = this.model.users.findOne({
       where: {
         email
       }
     });
+
+    delete user.dataValues.password;
+
+    return user;
   }
 
-  async createUser(user) {
-    return this.model.users.create(user);
+  async createUser(body) {
+    const user = this.model.users.create(body);
+
+    delete user.dataValues.password;
+
+    return user;
   }
 
-  async updateUser(id, user) {
-    return this.model.users.update(user, {
+  async updateUser(id, body) {
+    const user = this.model.users.update(body, {
       where: {
         id
       }
     });
+
+    delete user.dataValues.password;
+
+    return user;
   }
 
   async deleteUser(id) {

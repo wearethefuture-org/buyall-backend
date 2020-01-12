@@ -3,23 +3,22 @@ const AuthService = require('../../../services/auth');
 const login = async ctx => {
     const authService = new AuthService();
 
-    const user = {
-        email: ctx.request.body.email,
-        password: ctx.request.body.password
-    };
+    const { body } = ctx.request;
 
-    ctx.response.body = await authService.login(user);
+    ctx.response.body = await authService.login(body);
 };
 
 const register = async ctx => {
     const authService = new AuthService();
-    const user = ctx.request.body;
 
-    ctx.response.body = await authService.register(user);
+    const { body } = ctx.request;
+
+    ctx.response.body = await authService.register(body);
 };
 
 const confirmRegistration = async ctx => {
     const authService = new AuthService();
+
     const { key } = ctx.request.body;
 
     ctx.response.body = await authService.confirmRegistration(key);
@@ -27,6 +26,7 @@ const confirmRegistration = async ctx => {
 
 const sendForgotPasswordKey = async ctx => {
     const authService = new AuthService();
+
     const { email } = ctx.request.body;
 
     ctx.response.body = await authService.sendForgotPasswordKey(email);
@@ -34,6 +34,7 @@ const sendForgotPasswordKey = async ctx => {
 
 const checkForgotPasswordKey = async ctx => {
     const authService = new AuthService();
+
     const { email, key } = ctx.request.body;
 
     ctx.response.body = await authService.checkForgotPasswordKey(email, key);
@@ -41,6 +42,7 @@ const checkForgotPasswordKey = async ctx => {
 
 const changePassword = async ctx => {
     const authService = new AuthService();
+
     const { email, key, password } = ctx.request.body;
 
     ctx.response.body = await authService.changePassword(email, key, password);

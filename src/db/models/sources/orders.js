@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
     const orders = sequelize.define(
-        'orders ',
+        'orders',
         {
             id: {
                 type: DataTypes.BIGINT,

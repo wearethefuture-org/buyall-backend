@@ -70,7 +70,7 @@ module.exports = db => {
     as: db.aliases.users.usersKeys,
     field: 'user_id',
     targetKey: 'id',
-    foreignKey: 'userId',
+    foreignKey: 'userId'
   });
   db.usersKeys.belongsTo(db.users, {
     as: db.aliases.usersKeys.users,
@@ -84,10 +84,10 @@ module.exports = db => {
     as: db.aliases.users.orders,
     field: 'user_id',
     targetKey: 'id',
-    foreignKey: 'userId',
+    foreignKey: 'userId'
   });
   db.orders.belongsTo(db.users, {
-    as: db.aliases.orders.users,
+    as: db.aliases.orders.user,
     field: 'user_id',
     targetKey: 'id',
     foreignKey: 'userId',

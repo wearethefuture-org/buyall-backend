@@ -1,65 +1,59 @@
 const bcrypt = require('bcrypt');
 
+const config = require('../utils/config');
 const HttpError = require('../utils/httpError');
 const BaseModel = require('./baseModel');
 const MailService = require('./mail');
-const TokenService = require('./token');
 const UserService = require('./user');
 const UsersKeysService = require('./usersKeys');
 const UsersForgotPasswordsService = require('./usersForgotPasswords');
 const RenderHTMLService = require('./renderHTML');
-const generateRandomString = require('../utils/generateRandomString');
+const { generateRandomString, generateToken } = require('../utils/keys');
 
 class AuthService extends BaseModel {
-    async login(user) {
+    async login(body) {
         const userService = new UserService();
-        const tokenService = new TokenService();
 
-        const dbUser = await userService.getUserByEmail(user.email);
+        const user = await userService.getUserByEmail(body.email);
 
-        if (!dbUser) {
+        if (!user) {
             throw new HttpError(401, 'User is unregistered', 'Access denied');
         };
 
-        const compared = await bcrypt.compare(user.password, dbUser.password);
+        const compared = await bcrypt.compare(body.password, user.password);
 
-        if (compared) {
-            delete dbUser.dataValues.password;
-            const token = await tokenService.generateToken({user: dbUser.dataValues}, +process.env.TOKEN_TIME);
+        if (!compared) {
+            throw new HttpError(401, 'Bad password', 'Access denied');
+        }
 
-            return {
-                user: dbUser,
-                token
-            };
-        };
+        const token = generateToken(user.toJSON());
 
-        throw new HttpError(401, 'Bad password', 'Access denied');
+        return { user, token };
     }
 
-    async register(user) {
+    async register(body) {
         const renderHTMLService = new RenderHTMLService();
-        const tokenService = new TokenService();
         const userService = new UserService();
         const userKeysService = new UsersKeysService();
         const mailService = new MailService();
 
-        user.password = await bcrypt.hash(user.password, +process.env.saltRounds);
+        body.password = await bcrypt.hash(body.password, config.saltRounds);
 
-        if (await userService.getUserByEmail(user.email)) {
+        if (await userService.getUserByEmail(body.email)) {
             throw new HttpError(409, 'User has already registered', 'Can\'t register');
         };
 
-        user.status = 'pending';
-        user.role = 'user';
-        user.disabled = false;
+        body.status = 'pending';
+        body.role = 'user';
+        body.disabled = false;
 
-        const createdUser = await userService.createUser(user);
+        const user = await userService.createUser(body);
 
-        const key = await userKeysService.createUserKey(createdUser.id);
+        const key = await userKeysService.createUserKey(user.id);
 
         const html = await renderHTMLService.render('confirmEmail', {
-            name: createdUser.firstName,
-            url: `${process.env.FRONT_URL}:${process.env.FRONT_PORT}/auth/confirm/${key.key}`
+            name: user.firstName,
+            url: `${config.frontPort}:${config.frontPort}/auth/confirm/${key.key}`
         });
         const mail = {
             from: 'buyall@gmail.com',
@@ -68,15 +62,11 @@ class AuthService extends BaseModel {
             text: 'confirm your email',
             html
         };
-        mailService.sendMail(mail).then().catch();
+        mailService.sendMail(mail);
 
-        delete createdUser.dataValues.password;
-        const token = await tokenService.generateToken({user: createdUser.dataValues}, +process.env.TOKEN_TIME);
+        const token = generateToken(user.toJSON());
 
-        return {
-            user: createdUser,
-            token
-        };
+        return { user, token };
     }
 
     async confirmRegistration(key) {
@@ -85,13 +75,14 @@ class AuthService extends BaseModel {
 
         const userKey = await userKeysService.getUserKey(key);
 
-        if (userKey) {
-            await userService.updateUser(userKey.userId, {status: 'confirmed'});
-            userKeysService.deleteUserKey(userKey.id);
+        if (!userKey) {
+            return false;
+        }
 
-            return true;
-        };
-        return false;
+        await userService.updateUser(userKey.userId, {status: 'confirmed'});
+        userKeysService.deleteUserKey(userKey.id);
+
+        return true;
     }
 
     async sendForgotPasswordKey(email) {
@@ -168,7 +159,7 @@ class AuthService extends BaseModel {
 
         usersForgotPasswordsService.deleteForgotPasswordKey(trueKey.id);
 
-        const hash = await bcrypt.hash(password, +process.env.saltRounds);
+        const hash = await bcrypt.hash(password, config.saltRounds);
         await userService.updateUser(user.id, { password: hash });
 
         return true;
