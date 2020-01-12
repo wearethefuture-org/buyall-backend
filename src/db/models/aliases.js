@@ -21,7 +21,8 @@ module.exports = {
   },
   users: {
     usersKeys: 'usersKeys',
-    usersForgotPasswords: 'usersForgotPasswords'
+    usersForgotPasswords: 'usersForgotPasswords',
+    orders: 'orders'
   },
   usersKeys: {
     users: 'users'
@@ -29,7 +30,7 @@ module.exports = {
   usersForgotPasswords: {
     users: 'users'
   },
-  subCategoryCharacteristics: {
-
+  orders: {
+    user: 'user'
   }
 };

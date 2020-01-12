@@ -80,6 +80,20 @@ module.exports = db => {
     onDelete: 'CASCADE'
   });
 
+  db.users.hasMany(db.orders, {
+    as: db.aliases.users.orders,
+    field: 'user_id',
+    targetKey: 'id',
+    foreignKey: 'userId',
+  });
+  db.orders.belongsTo(db.users, {
+    as: db.aliases.orders.users,
+    field: 'user_id',
+    targetKey: 'id',
+    foreignKey: 'userId',
+    onDelete: 'CASCADE'
+  });
+
   db.users.hasMany(db.usersForgotPasswords, {
     as: db.aliases.users.usersForgotPasswords,
     field: 'user_id',
