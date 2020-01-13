@@ -20,7 +20,11 @@ class UserService extends BaseModel {
     });
 
     if (user) {
+      const { password } = user.dataValues;
+      
       delete user.dataValues.password;
+
+      user.password = password;
     }
 
     return user;
@@ -37,8 +41,13 @@ class UserService extends BaseModel {
       }]
     });
 
+
     if (user) {
+      const { password } = user.dataValues;
+      
       delete user.dataValues.password;
+
+      user.password = password;
     }
 
     return user;
@@ -57,7 +66,11 @@ class UserService extends BaseModel {
       }]
     });
 
+    const { password } = user.dataValues;
+    
     delete user.dataValues.password;
+
+    user.password = password;
 
     return user;
   }
@@ -74,7 +87,11 @@ class UserService extends BaseModel {
     });
 
     if (user) {
+      const { password } = user.dataValues;
+      
       delete user.dataValues.password;
+
+      user.password = password;
     }
 
     return user;

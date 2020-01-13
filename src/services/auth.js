@@ -16,6 +16,7 @@ const { generateRandomString, generateToken } = require('../utils/keys');
 class AuthService extends BaseModel {
     async login(body) {
         const userService = new UserService();
+        const orderService = new OrderService();
 
         const user = await userService.getUserByEmail(body.email);
 
@@ -28,6 +29,31 @@ class AuthService extends BaseModel {
         if (!compared) {
             throw new HttpError(401, 'Bad password', 'Access denied');
         }
+
+        user.dataValues.orders = [];
+
+        await Promise.each(body.orders || [], async order => {
+            let dbOrder = await orderService.getOrderByUserProductId(order.product.id, user.id);
+
+            if (!dbOrder) {
+                const body = {
+                    amount: order.amount,
+                    productId: order.product.id,
+                    userId: user.id,
+                    status: 'in cart'
+                };
+
+                const dbOrder = await orderService.createOrder(body);
+
+                user.dataValues.orders.push(dbOrder);
+
+                return;
+            }
+            
+            dbOrder = await orderService.updateOrder(dbOrder.id, {amount: order.amount});
+
+            user.dataValues.orders.push(dbOrder);
+        });
 
         const token = generateToken(user.toJSON());
 
