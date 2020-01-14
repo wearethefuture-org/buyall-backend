@@ -70,10 +70,24 @@ module.exports = db => {
     as: db.aliases.users.usersKeys,
     field: 'user_id',
     targetKey: 'id',
-    foreignKey: 'userId',
+    foreignKey: 'userId'
   });
   db.usersKeys.belongsTo(db.users, {
     as: db.aliases.usersKeys.users,
+    field: 'user_id',
+    targetKey: 'id',
+    foreignKey: 'userId',
+    onDelete: 'CASCADE'
+  });
+
+  db.users.hasMany(db.orders, {
+    as: db.aliases.users.orders,
+    field: 'user_id',
+    targetKey: 'id',
+    foreignKey: 'userId'
+  });
+  db.orders.belongsTo(db.users, {
+    as: db.aliases.orders.user,
     field: 'user_id',
     targetKey: 'id',
     foreignKey: 'userId',

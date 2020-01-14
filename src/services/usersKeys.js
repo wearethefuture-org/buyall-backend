@@ -1,5 +1,5 @@
 const BaseModel = require('./baseModel');
-const generateRandomString = require('../utils/generateRandomString');
+const { generateRandomString } = require('../utils/keys');
 
 class UserKeysService extends BaseModel {
     async createUserKey(id) {

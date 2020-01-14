@@ -29,3 +29,12 @@ exports.databaseName = process.env.DATABASE_NAME;
 exports.username = process.env.POSTGRES_USERNAME;
 exports.password = process.env.POSTGRES_PASSWORD;
 exports.host = process.env.POSTGRES_HOST;
+
+// Security
+exports.tokenTime = +process.env.TOKEN_TIME;
+exports.secretKey = process.env.SECRET_KEY;
+exports.saltRounds = +process.env.SALT_ROUNDS;
+
+// Front
+exports.frontUrl = process.env.FRONT_URL;
+exports.frontPort = process.env.FRONT_PORT;
