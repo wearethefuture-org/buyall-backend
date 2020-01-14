@@ -28,7 +28,8 @@ module.exports = {
       },
       amount: {
         type: DataTypes.INTEGER,
-        allowNull: true,
+        allowNull: false,
+        defaultValue: 0,
         field: 'amount'
       },
       status: {

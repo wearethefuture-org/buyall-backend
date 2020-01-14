@@ -52,6 +52,14 @@ class OrderService extends BaseModel {
 
     return order;
   }
+
+  async deleteOrder(id) {
+      return this.model.orders.destroy({
+          where: {
+            id
+          }
+      });
+  }
 }
 
 module.exports = OrderService;
