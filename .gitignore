@@ -8,4 +8,5 @@ docker-compose.yml
 
 # envs
 .env
+dev.env
 e2e.env
