@@ -18,8 +18,6 @@ substitutions:
   _GKE_CLUSTER: standard-cluster-1
 
   _CONTAINERNAME: bdeploy
-  _DEPLOYNAME: bdeploy-new	
-  _REPO_NAME: Bdeploy
-  _GIT_USER: Maxe1
+  _DEPLOYNAME: bdeploy	
 
-  _VERSION: v1.3
+  _VERSION: v1.5
