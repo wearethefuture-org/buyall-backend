@@ -23,4 +23,4 @@ substitutions:
   _CONTAINERNAME: bdeploy
   _DEPLOYNAME: bdeploy	
 
-  _VERSION: '1.5'
+  _VERSION: '1.6'
