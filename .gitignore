@@ -1,12 +1,21 @@
-node_modules/
+# devops
 kubernetes/
+docker-compose.yml
+
+# env
+*.env
+!example.env
+
+# dependency
+node_modules/
+
+# logs and locks
 package-lock.json
 yarn.lock
-docker-compose.yml
+yarn-error.log
+
+# editors
 .idea
 
-
-# envs
-.env
-dev.env
-e2e.env
+# configs
+storage.json
