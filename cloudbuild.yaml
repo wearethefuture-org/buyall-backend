@@ -1,7 +1,4 @@
 steps:
-  - name: 'gcr.io/cloud-builders/git'
-    args: ['clone', 'https://github.com/${_GIT_USER}/${_REPO_NAME}']
-  
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build','-t', 'gcr.io/${_PROJECT}/${_CONTAINERNAME}:${_VERSION}','.']
   
