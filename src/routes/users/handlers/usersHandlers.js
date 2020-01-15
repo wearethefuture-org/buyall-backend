@@ -1,6 +1,5 @@
 const UserService = require('../../../services/user');
 const StorageService = require('../../../services/storage');
-const FileService = require('../../../services/file');
 
 const createUser = async ctx => {
   const userService = new UserService();
@@ -28,7 +27,6 @@ const users = async ctx => {
 const updateUser = async ctx => {
   const userService = new UserService();
   const storageService = new StorageService();
-  const fileService = new FileService();
 
   const { id } = ctx.params;
   const { body } = ctx.request;
@@ -42,19 +40,7 @@ const updateUser = async ctx => {
 
   body.imgId = file.id;
 
-  const user = await userService.getUser(id);
-
   ctx.response.body = await userService.updateUser(id, body);
-
-  if (!user.imgId) {
-    return;
-  }
-
-  const fileMustBeDeleted = await fileService.getFile(user.imgId);
-
-  storageService.deleteFile(`users-images/${fileMustBeDeleted.name}`);
-
-  fileMustBeDeleted.destroy();
 };
 
 module.exports = {
