@@ -1,8 +1,17 @@
+# env
+*.env
+!example.env
+
+# dependency
 node_modules/
+
+# logs and locks
 package-lock.json
 yarn.lock
+yarn-error.log
+
+# editors
 .idea
 
-# envs
-.env
-e2e.env
+# configs
+storage.json

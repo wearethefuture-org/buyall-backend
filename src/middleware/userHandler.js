@@ -19,7 +19,7 @@ const roleMiddleware = async (ctx, next) => {
             return;
         }
 
-        routeGuared = true;
+        // routeGuared = true;
     });
 
     if (!routeGuared) {
