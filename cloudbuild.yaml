@@ -1,10 +1,4 @@
 steps:
-  - name: 'gcr.io/cloud-builders/docker'
-    args: ['build','-t', 'gcr.io/${_PROJECT}/${_CONTAINERNAME}:${_VERSION}','.']
-  
-  - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/${_PROJECT}/${_CONTAINERNAME}:${_VERSION}']    
-
   - name: 'gcr.io/cloud-builders/gke-deploy'
     args:
     - 'run'
@@ -20,4 +14,4 @@ substitutions:
   _CONTAINERNAME: bdeploy
   _DEPLOYNAME: bdeploy	
 
-  _VERSION: v1.5
+  _VERSION: 1.3
