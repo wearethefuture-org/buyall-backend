@@ -14,7 +14,6 @@ module.exports = {
           subCategoryId: subCategory.id,
           name: faker.lorem.words(2),
           description: faker.lorem.sentence(10),
-          img: faker.image.image(),
           available: faker.random.boolean(),
           isPromotion: faker.random.boolean(),
           weight: faker.random.number(),
@@ -24,10 +23,22 @@ module.exports = {
         if (product.available) product.amount = faker.random.number();
         if (product.isPromotion) product.discount = faker.random.number({max: 100, precision: 0.1});
 
-        try {
-          await model.products.create(product);
-        } catch (error) {
-          console.log(error.message);
+        const dbProduct = await model.products.create(product);
+
+        await model.files.create({
+          name: 'Seed product image', 
+          url: faker.image.image(),
+          oneProductId: dbProduct.id
+        });
+
+        const amountImages = 3;
+
+        for (let i = 0;i < amountImages; i++) {
+          await model.files.create({
+            name: 'Seed product image', 
+            url: faker.image.image(),
+            manyProductId: dbProduct.id
+          });
         }
       }
     });

@@ -11,14 +11,19 @@ let env = '';
     case 'production':
       env = 'prod';
       break;
-    case 'e2e': 
-      env = 'e2e';
-      break;
     default:
       break;
   }
 
 dotenv.config({ path: root(`${env}.env`) });
+
+let cloudConfigPath;
+
+if (process.env.CLOUD_JSON_URL) {
+  cloudConfigPath = process.env.CLOUD_JSON_URL;
+} else {
+  cloudConfigPath = root(process.env.CLOUD_JSON_PATH);
+}
 
 // Port and URL
 exports.url = process.env.URL;
@@ -29,3 +34,8 @@ exports.databaseName = process.env.DATABASE_NAME;
 exports.username = process.env.POSTGRES_USERNAME;
 exports.password = process.env.POSTGRES_PASSWORD;
 exports.host = process.env.POSTGRES_HOST;
+
+// Google Cloud
+exports.cloudConfigPath = cloudConfigPath;
+exports.projectId = process.env.PROJECT_ID;
+exports.bucketName = process.env.BUCKET_NAME;

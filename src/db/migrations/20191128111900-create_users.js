@@ -1,7 +1,6 @@
-module.exports = (sequelize, DataTypes) => {
-  const user = sequelize.define(
-    'users',
-    {
+module.exports = {
+  up: (queryInterface, DataTypes) =>
+    queryInterface.createTable('users', {
       id: {
         type: DataTypes.BIGINT,
         allowNull: false,
@@ -65,21 +64,15 @@ module.exports = (sequelize, DataTypes) => {
       createdAt: {
         type: DataTypes.DATE,
         allowNull: false,
-        defaultValue: sequelize.fn('NOW'),
+        defaultValue: DataTypes.literal('CURRENT_TIMESTAMP'),
         field: 'created_at'
       },
       updatedAt: {
         type: DataTypes.DATE,
-        allowNull: true,
+        allowNull: false,
+        defaultValue: DataTypes.literal('CURRENT_TIMESTAMP'),
         field: 'updated_at'
       }
-    },
-    {
-      tableName: 'users',
-      timestamps: false,
-      createdAt: 'created_at',
-      updatedAt: true
-    }
-  );
-  return user;
+    }),
+  down: queryInterface => queryInterface.dropTable('users', {})
 };
