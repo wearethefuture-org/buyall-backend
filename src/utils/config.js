@@ -1,5 +1,6 @@
 const dotenv = require('dotenv');
 const path = require('path');
+const downloadCloudConfig = require('./downloadCloudConfig');
 
 const root = path.join.bind(this, __dirname, '../../');
 
@@ -20,7 +21,9 @@ dotenv.config({ path: root(`${env}.env`) });
 let cloudConfigPath;
 
 if (process.env.CLOUD_JSON_URL) {
-  cloudConfigPath = process.env.CLOUD_JSON_URL;
+  cloudConfigPath = root('storage.json');
+
+  downloadCloudConfig(process.env.CLOUD_JSON_URL, 'storage.json');
 } else {
   cloudConfigPath = root(process.env.CLOUD_JSON_PATH);
 }

@@ -1,5 +1,5 @@
 {
-  "ignore": ["node_modules"],
+  "ignore": ["node_modules", "storage.json"],
   "env": {
     "PORT": 3004,
     "URL": "http://localhost"

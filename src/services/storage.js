@@ -1,15 +1,12 @@
 const { Storage } = require('@google-cloud/storage');
-const path = require('path');
 
 const BaseModel = require('./baseModel');
 const config = require('../utils/config');
 
-const root = path.join.bind(this, __dirname, '../../');
-
 class StorageService extends BaseModel {
     constructor() {
         super();
-        
+
         this.storage = new Storage({
             keyFilename: config.cloudConfigPath,
             projectId: config.projectId
