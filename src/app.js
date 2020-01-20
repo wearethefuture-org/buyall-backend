@@ -8,7 +8,7 @@ const passport = require('./services/passport');
 const errorHandler = require('./middleware/errorHandler');
 const authMiddleware = require('./middleware/authHandler');
 const userRoleMiddleware = require('./middleware/userHandler');
-const fileUploadHandler = require('./middleware/fileHandler');
+const { fileHandler, filesHandler } = require('./middleware/fileHandler');
 const router = require('./routes');
 const { port } = require('./utils/config');
 
@@ -27,7 +27,8 @@ app.use(cors());
 app.use(errorHandler);
 app.use(authMiddleware);
 app.use(userRoleMiddleware);
-app.use(fileUploadHandler);
+app.use(filesHandler);
+app.use(fileHandler);
 
 app.use(passport.initialize());
 app.use(router);

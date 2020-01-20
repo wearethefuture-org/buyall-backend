@@ -1,5 +1,6 @@
 const ProductService = require('../../../services/product');
 const CharacteristicService = require('../../../services/characteristic');
+const StorageService = require('../../../services/storage');
 const Promise = require('bluebird');
 
 const getProducts = async ctx => {
@@ -20,12 +21,26 @@ const getProduct = async ctx => {
 const createProduct = async ctx => {
     const productService = new ProductService();
     const characteristicService = new CharacteristicService(); 
+    const storageService = new StorageService();
 
-    const product = await productService.createProduct(ctx.request.body);
+    const { body } = ctx.request;
 
-    await Promise.mapSeries(ctx.request.body.characteristicsValues, async value => {
+    const productBody = JSON.parse(body.product);
+    
+    const product = await productService.createProduct(productBody );
+
+    await Promise.each(productBody.characteristicsValues, async value => {
         value.productId = product.id;
         await characteristicService.createCharacteristicValue(value);
+    });
+
+    await Promise.each(ctx.files.files, async (file, index) => {
+        if (index === 0) {
+            await storageService.uploadFile(file, 'products-images/', {oneProductId: product.id});
+            return;
+        }
+        
+        await storageService.uploadFile(file, 'products-images/', {manyProductId: product.id});
     });
     
     ctx.response.body = await productService.getProduct(product.id);
