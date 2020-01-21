@@ -24,22 +24,20 @@ const createProduct = async ctx => {
     const storageService = new StorageService();
 
     const { body } = ctx.request;
-
+    const { images } = ctx.files;
+    const previewImage = ctx.files.previewImage[0];
     const productBody = JSON.parse(body.product);
-    
-    const product = await productService.createProduct(productBody );
+
+    const product = await productService.createProduct(productBody);
 
     await Promise.each(productBody.characteristicsValues, async value => {
         value.productId = product.id;
         await characteristicService.createCharacteristicValue(value);
     });
 
-    await Promise.each(ctx.files.files, async (file, index) => {
-        if (index === 0) {
-            await storageService.uploadFile(file, 'products-images/', {oneProductId: product.id});
-            return;
-        }
-        
+    await storageService.uploadFile(previewImage, 'products-images/', {oneProductId: product.id});
+
+    await Promise.each(images, async file => {
         await storageService.uploadFile(file, 'products-images/', {manyProductId: product.id});
     });
     
