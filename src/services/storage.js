@@ -1,4 +1,8 @@
 const { Storage } = require('@google-cloud/storage');
+const imagemin = require('imagemin');
+const sharp = require('sharp');
+const mozjpeg = require('imagemin-mozjpeg');
+const isJpg = require('is-jpg');
 
 const BaseModel = require('./baseModel');
 const config = require('../utils/config');
@@ -16,22 +20,38 @@ class StorageService extends BaseModel {
         this.bucket = this.storage.bucket(config.bucketName);
     }
 
-    async uploadFile(file, destination) {
+    async convertToJpg(input) {
+        if (isJpg(input)) {
+            return input;
+        }
+
+        return sharp(input) 
+            .jpeg()
+            .toBuffer();
+    }
+
+    async uploadFile(file, destination, fileFields = {}) {
+        const buffer = await imagemin.buffer(file.buffer, {
+            plugins: [this.convertToJpg, mozjpeg({ quality: 85 })]
+        });
+
         const fileName = `${Date.now()}_${file.originalname}`;
 
         this.bucket.file(`${destination}${fileName}`).createWriteStream({
             metadata: {
-                contentType: file.mimetype
+                contentType: 'image/jpeg'
             },
             resumable: false
-        }).end(file.buffer);
+        }).end(buffer);
 
         const url = `${this.baseUrl}/${this.bucket.name}/${destination}${fileName}`;
 
-        return await this.model.files.create({
+        const fileBody = Object.assign({
             name: fileName,
             url
-        });
+        }, fileFields);
+
+        return await this.model.files.create(fileBody);
     }
 
     async deleteFile(path) {

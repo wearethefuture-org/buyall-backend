@@ -8,6 +8,14 @@ class FileService extends BaseModel {
       }
     });
   }
+
+  async deleteFile(id) {
+    return this.model.files.destroy({
+      where: {
+        id
+      }
+    });
+  } 
 }
 
 module.exports = FileService;
