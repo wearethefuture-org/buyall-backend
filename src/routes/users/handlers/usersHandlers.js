@@ -32,7 +32,8 @@ const updateUser = async ctx => {
   const { body } = ctx.request;
 
   if (!ctx.file) {
-    ctx.response.body = await userService.updateUser(id, body);
+    await userService.updateUser(id, body);
+    ctx.response.body = await userService.getUser(id);
     return;
   }
 
@@ -40,7 +41,9 @@ const updateUser = async ctx => {
 
   body.imgId = file.id;
 
-  ctx.response.body = await userService.updateUser(id, body);
+  await userService.updateUser(id, body);
+
+  ctx.response.body = await userService.getUser(id);
 };
 
 module.exports = {
