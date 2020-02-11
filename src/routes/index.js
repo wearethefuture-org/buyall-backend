@@ -7,6 +7,7 @@ const subCategoriesRouter = require('./subCategories');
 const productsRouter = require('./products');
 const characteristicsRouter = require('./characteristics');
 const envRouter = require('./env');
+const commentsRouter=require('./comments')
 
 const router = combineRouters([
     usersRouter,
@@ -15,7 +16,8 @@ const router = combineRouters([
     subCategoriesRouter,
     productsRouter,
     characteristicsRouter,
-    envRouter 
+    envRouter,
+    commentsRouter
 ]);
 
 module.exports = router;

@@ -24,7 +24,8 @@ module.exports = {
   users: {
     usersKeys: 'usersKeys',
     usersForgotPasswords: 'usersForgotPasswords',
-    files: 'img'
+    files: 'img',
+    comments: 'comments'
   },
   usersKeys: {
     users: 'users'
@@ -34,5 +35,8 @@ module.exports = {
   },
   files: {
     products: 'products'
+  },
+  comments:{
+    user: 'user'
   }
 };
