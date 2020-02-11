@@ -27,15 +27,17 @@ class CommentService extends baseModel {
     
       async createComment(comment) {
         const createComment = await this.model.comments.create(comment);
-        return this.getComment(createComment.id);
+        return createComment;
       }
     
       async updateComment(id, comment) {
-        return await this.model.comments.update(comment, {
+        await this.model.comments.update(comment, {
             where: {
               id
             }
         });
+        
+        return this.getComment(id);
       }
     
       async deleteComment(id) {
