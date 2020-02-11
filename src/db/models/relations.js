@@ -117,4 +117,18 @@ module.exports = db => {
     as: db.aliases.users.files,
     foreignKey: 'imgId'
   });
+  db.users.hasMany(db.comments, {
+    as: db.aliases.users.comments,
+    field: 'user_id',
+    targetKey: 'id',
+    foreignKey: 'userId',
+  });
+  db.comments.belongsTo(db.users, {
+    as: db.aliases.comments.users,
+    field: 'user_id',
+    targetKey: 'id',
+    foreignKey: 'userId',
+    onDelete: 'CASCADE'
+  });
+  
 };

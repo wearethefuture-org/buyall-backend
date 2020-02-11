@@ -1,11 +1,10 @@
 FROM node:12
 
-WORKDIR /opt/backend
+RUN mkdir -p /usr/src/app
+WORKDIR /user/src/app
 
-RUN apt-get -y update && apt-get -y install bash git curl python yarn nano
-
-RUN npm i -g pm2
-
-RUN yarn install
-
-RUN npm run db:migrate:dev && pm2 kill && pm2 start --env dev
+COPY package.json ./
+RUN npm install
+RUN npm install -g sequelize-cli
+COPY . .
+CMD ["npm", "start"]

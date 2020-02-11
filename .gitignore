@@ -1,3 +1,7 @@
+# devops
+kubernetes/
+docker-compose.yml
+
 # env
 *.env
 !example.env
