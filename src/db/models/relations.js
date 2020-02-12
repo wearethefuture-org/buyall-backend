@@ -137,7 +137,7 @@ module.exports = db => {
     foreignKey: 'productId',
   });
   db.comments.belongsTo(db.products, {
-    as: db.aliases.comments.products,
+    as: db.aliases.comments.product,
     targetKey: 'id',
     foreignKey: 'productId',
     onDelete: 'CASCADE'
