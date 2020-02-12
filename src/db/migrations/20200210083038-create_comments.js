@@ -21,6 +21,14 @@ module.exports = {
         },
         field: 'userId'
       },
+      productId:{
+        type: DataTypes.BIGINT,
+        references:{
+          model: 'products',
+          key: 'id'
+        },
+        field: 'productId'
+      },
       createdAt: {
         type: DataTypes.DATE,
         allowNull: false,

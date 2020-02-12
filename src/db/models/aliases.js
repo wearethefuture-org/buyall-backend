@@ -11,7 +11,8 @@ module.exports = {
     subCategories: 'subCategories',
     characteristicsValues: 'characteristicsValues',
     previewImage: 'previewImage',
-    images: 'images'
+    images: 'images',
+    comments: 'comments'
   },
   characteristicsSettings: {
     subCategories: 'subCategories',
@@ -37,6 +38,7 @@ module.exports = {
     products: 'products'
   },
   comments:{
-    user: 'user'
+    user: 'user',
+    product: 'product'
   }
 };
