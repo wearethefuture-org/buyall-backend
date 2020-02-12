@@ -15,6 +15,10 @@ class ProductService extends BaseModel {
         {
           model: this.model.files,
           as: this.aliases.products.images
+        },
+        {
+          model: this.model.comments,
+          as: this.aliases.products.comments
         }
       ]
     };
@@ -43,6 +47,10 @@ class ProductService extends BaseModel {
         {
           model: this.model.files,
           as: this.aliases.products.images
+        },
+        {
+          model: this.model.comments,
+          as: this.aliases.products.comments
         }
       ]
     };
@@ -71,6 +79,10 @@ class ProductService extends BaseModel {
         {
           model: this.model.files,
           as: this.aliases.products.images
+        },
+        {
+          model: this.model.comments,
+          as: this.aliases.products.comments
         }
       ]
     });

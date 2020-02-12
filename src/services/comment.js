@@ -7,6 +7,10 @@ class CommentService extends baseModel {
                 {
                     model: this.model.users,
                     as: this.aliases.comments.user
+                },
+                {
+                    model: this.model.products,
+                    as: this.aliases.comments.product
                 }
             ]
         })
@@ -20,6 +24,10 @@ class CommentService extends baseModel {
                 {
                     model: this.model.users,
                     as: this.aliases.comments.user
+                },
+                {
+                    model: this.model.products,
+                    as: this.aliases.comments.product
                 }
             ]
         });

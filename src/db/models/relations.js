@@ -130,5 +130,17 @@ module.exports = db => {
     foreignKey: 'userId',
     onDelete: 'CASCADE'
   });
-  
+  db.products.hasMany(db.comments, {
+    as: db.aliases.products.comments,
+    field: 'product_id',
+    targetKey: 'id',
+    foreignKey: 'productId',
+  });
+  db.comments.belongsTo(db.products, {
+    as: db.aliases.comments.products,
+    targetKey: 'id',
+    foreignKey: 'productId',
+    onDelete: 'CASCADE'
+  });
+
 };
