@@ -18,8 +18,13 @@ class ProductService extends BaseModel {
         },
         {
           model: this.model.comments,
-          as: this.aliases.products.comments
-        }
+          as: this.aliases.products.comments,
+          include: [
+            {
+              model: this.model.users,
+              as: this.aliases.comments.user
+          },],
+        },
       ]
     };
 
@@ -82,8 +87,18 @@ class ProductService extends BaseModel {
         },
         {
           model: this.model.comments,
-          as: this.aliases.products.comments
-        }
+          as: this.aliases.products.comments,
+        },
+        
+        {
+          model: this.model.comments,
+          as: this.aliases.products.comments,
+          include: [
+            {
+              model: this.model.users,
+              as: this.aliases.comments.user
+          },],
+        },
       ]
     });
   }
