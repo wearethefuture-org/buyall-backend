@@ -11,7 +11,8 @@ module.exports = {
     subCategories: 'subCategories',
     characteristicsValues: 'characteristicsValues',
     previewImage: 'previewImage',
-    images: 'images'
+    images: 'images',
+    comments: 'comments'
   },
   characteristicsSettings: {
     subCategories: 'subCategories',
@@ -24,7 +25,8 @@ module.exports = {
   users: {
     usersKeys: 'usersKeys',
     usersForgotPasswords: 'usersForgotPasswords',
-    files: 'img'
+    files: 'img',
+    comments: 'comments'
   },
   usersKeys: {
     users: 'users'
@@ -34,5 +36,9 @@ module.exports = {
   },
   files: {
     products: 'products'
+  },
+  comments:{
+    user: 'user',
+    product: 'product'
   }
 };

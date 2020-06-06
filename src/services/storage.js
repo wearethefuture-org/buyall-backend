@@ -37,12 +37,20 @@ class StorageService extends BaseModel {
 
         const fileName = `${Date.now()}_${file.originalname}`;
 
-        this.bucket.file(`${destination}${fileName}`).createWriteStream({
-            metadata: {
-                contentType: 'image/jpeg'
-            },
-            resumable: false
-        }).end(buffer);
+        this.bucket.file(`${destination}${fileName}`)
+            .createWriteStream({
+                metadata: {
+                    contentType: 'image/jpeg'
+                },
+                resumable: false
+            })
+            .on('finish', () => {
+                const file = this.bucket.file(`${destination}${fileName}`);
+
+                file.makePublic();
+            })
+            .end(buffer);
+        
 
         const url = `${this.baseUrl}/${this.bucket.name}/${destination}${fileName}`;
 

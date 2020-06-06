@@ -39,7 +39,7 @@ const createProduct = async ctx => {
         await storageService.uploadFile(previewImage, 'products-images/', {oneProductId: product.id});
     }
 
-    await Promise.each(images, async file => {
+    await Promise.each(images || [], async file => {
         await storageService.uploadFile(file, 'products-images/', {manyProductId: product.id});
     });
     
